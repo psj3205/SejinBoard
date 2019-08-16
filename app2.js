@@ -9,6 +9,7 @@ var upload = multer();
 var fs = require('fs');
 var DummyDB = require('./dummyDB');
 var mysql = require('mysql');
+var ejs = require('ejs');
 
 var app = express();
 
@@ -21,14 +22,6 @@ app.use(expressSession({
 }))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.get('/', (req, res) => {
-    var output = {};
-    output.cookies = req.cookies;
-    output.session = req.session;
-
-    req.session.now = (new Date()).toUTCString();
-    res.send(output);
-})
 
 var client = mysql.createConnection({
     user: 'root',
@@ -115,6 +108,60 @@ app.put('/user/:id', (req, res) => {
 
 app.delete('/user/:id', (req, res) => {
     res.send(DummyDB.remove(req.params.id));
+});
+
+app.get('/', (req, res) => {
+    fs.readFile('./views/list.html', 'utf8', (err, data) => {
+        client.query('SELECT * FROM products', (err, results) => {
+            res.send(ejs.render(data, {
+                data: results
+            }));
+        });
+    });
+});
+
+app.get('/delete/:id', (req, res) => {
+    client.query('DELETE FROM products WHERE id=?', [req.params.id], () => {
+        res.redirect('/');
+    })
+});
+
+app.get('/insert', (req, res) => {
+    fs.readFile('./views/insert.html', 'utf8', (err, data) => {
+        res.send(data);
+    });
+});
+
+app.post('/insert', (req, res) => {
+    var body = req.body;
+    console.log(body);
+    client.query('INSERT INTO products (name, modelnumber, series) VALUES (?,?,?)', [
+        body.name, body.modelnumber, body.series
+    ], () => {
+        res.redirect('/');
+    });
+});
+
+app.get('/edit/:id', (req, res) => {
+    fs.readFile('./views/edit.html', 'utf8', (err, data) => {
+        client.query('SELECT * FROM products WHERE id =?', [
+            req.params.id
+        ], (err, result) => {
+            res.send(ejs.render(data, {
+                data: result[0]
+            }));
+        });
+    });
+});
+
+app.post('/edit/:id', (req, res) => {
+    var body = req.body;
+
+    client.query('UPDATE products SET name=?, modelnumber=?, series=? WHERE id=?', [
+        body.name, body.modelnumber, body.series, req.params.id
+    ], () => {
+        res.redirect('/');
+    });
 });
 
 http.createServer(app).listen(52273, () => {
