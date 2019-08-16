@@ -8,6 +8,7 @@ var multer = require('multer');
 var upload = multer();
 var fs = require('fs');
 var DummyDB = require('./dummyDB');
+var mysql = require('mysql');
 
 var app = express();
 
@@ -27,6 +28,24 @@ app.get('/', (req, res) => {
 
     req.session.now = (new Date()).toUTCString();
     res.send(output);
+})
+
+var client = mysql.createConnection({
+    user: 'root',
+    password: '3gkd0wkr9wjs05!',
+    database: 'Company'
+}, function (error) {
+    if (error) {
+        console.log(error);
+    }
+});
+client.query('SELECT * FROM products', function (error, result, fields) {
+    if (error) {
+        console.log(error);
+    }
+    else {
+        console.log(result);
+    }
 })
 
 var storage = multer.diskStorage({
