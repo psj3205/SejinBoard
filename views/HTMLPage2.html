@@ -1,26 +1,42 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>Web Chat</title>
     <meta charset="utf-8" />
     <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      window.onload = function() {
-        var room = prompt("방 이름을 입력하세요.", "");
+      $(document).ready(function() {
         var socket = io.connect();
 
-        socket.emit("join", room);
         socket.on("message", function(data) {
-          $("<p>" + data + "</p>").appendTo("body");
+          var output = "";
+          output += "<li>";
+          output += "<h3>" + data.name + "</h3>";
+          output += "<p>" + data.message + "</p>";
+          output += "<p>" + data.date + "</p>";
+          output += "</li>";
+
+          $(output).prependTo("#content");
         });
 
-        document.getElementById("button").onclick = function() {
-          socket.emit("message", "socket.io room message");
-        };
-      };
+        $("button").click(function() {
+          socket.emit("message", {
+            name: $("#name").val(),
+            message: $("#message").val(),
+            date: new Date().toUTCString()
+          });
+        });
+      });
     </script>
   </head>
   <body>
-    <button id="button">EMIT</button>
+    <h1>Socket.io Chat</h1>
+    <p>Chat With Node.js</p>
+    <hr />
+    <input type="text" id="name" />
+    <input type="text" id="message" />
+    <button>Button</button>
+    <ul id="content"></ul>
   </body>
 </html>

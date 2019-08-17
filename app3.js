@@ -13,15 +13,7 @@ var server = http.createServer((req, res) => {
 
 var io = socketio.listen(server);
 io.sockets.on('connection', (socket) => {
-    socket.on('join', (data) => {
-        socket.join(data);
-        socket.room = data;
-        console.log('join:', socket);
-    });
-
     socket.on('message', (data) => {
-        var room = socket.room;
-        console.log('room:', socket);
-        io.sockets.in(room).emit('message', data);
+        io.sockets.emit('message', data);
     });
 });
