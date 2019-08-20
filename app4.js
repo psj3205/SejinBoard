@@ -16,15 +16,33 @@ server.on('connection', (socket) => {
 server.on('request', (req, res) => {
     console.log('클라이언트 요청이 들어왔습니다.');
 
-    var filename = './views/다운로드.jpg';
+    var filename = './views/naverwebtoon.jpg';
     var infile = fs.createReadStream(filename, { flags: 'r' });
+    var filelength = 0;
+    var curlength = 0;
 
-    infile.pipe(res);
-    // fs.readFile(filename, (err, data) => {
-    //     res.writeHead(200, { 'Content-Type': 'image/jpg' });
-    //     res.write(data);
-    //     res.end();
-    // });
+    fs.stat(filename, (err, stats) => {
+        filelength = stats.size;
+    });
+
+    res.writeHead(200, { "Content-Type": "image/jpg" });
+
+    infile.on('readable', () => {
+        var chunk;
+        console.log(chunk);
+        console.log("+++++++++++++++++++++++++++");
+        while (null !== (chunk = infile.read(1000))) {
+            console.log('읽어들인 데이터 크기: %d 바이트', chunk.length);
+            curlength += chunk.length;
+            res.write(chunk, 'utf8', (err) => {
+                console.log('파일 부분 쓰기 완료:%d, 파일 크기:%d', curlength, filelength);
+                if (curlength >= filelength) {
+                    res.end();
+                }
+            });
+        }
+        // chunk = infile.read();
+    });
 });
 
 server.on('close', () => {
