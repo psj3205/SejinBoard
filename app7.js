@@ -51,7 +51,7 @@ var upload = multer({
 
 var router = express.Router();
 
-router.route('/process/photo').post(upload.array('photo'), (req, res) => {
+router.route('/process/photo').post(upload.array('photo', 1), (req, res) => {
     console.log('/process/photo 호출됨.');
     console.log(req.body);
     var paramId = req.body.id;
