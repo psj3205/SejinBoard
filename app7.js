@@ -34,7 +34,7 @@ app.use(cors());
 
 var storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        callback(null, 'uploads');
+        callback(null, 'uploads/');
     },
     filename: (req, file, callback) => {
         callback(null, Date.now() + file.originalname);
@@ -53,7 +53,7 @@ var router = express.Router();
 
 router.route('/process/photo').post(upload.array('photo'), (req, res) => {
     console.log('/process/photo 호출됨.');
-
+    console.log(req.body);
     var paramId = req.body.id;
     var paramTime = req.body.time;
     var paramTextfield = req.body.textfield;
@@ -62,7 +62,8 @@ router.route('/process/photo').post(upload.array('photo'), (req, res) => {
     var originalname = '',
         name = '',
         mimetype = '',
-        size = 0;
+        size = 0,
+        path = '';
 
     if (Array.isArray(files)) {
         console.log("배열에 들어있는 파일 개수 : %d", files.length);
@@ -71,6 +72,7 @@ router.route('/process/photo').post(upload.array('photo'), (req, res) => {
             name = files[index].filename;
             mimetype = files[index].mimetype;
             size = files[index].size;
+            path = '/' + files[index].destination + name;
         }
     }
     else {
@@ -79,18 +81,23 @@ router.route('/process/photo').post(upload.array('photo'), (req, res) => {
         name = files[index].name;
         mimetype = files[index].mimetype;
         size = files[index].size;
+        path = '/' + files[index].destination + name;
     }
 
     console.log('현재 파일 정보 : ' + originalname + ', '
-        + name + ', ' + mimetype + ', ' + size);
+        + name + ', ' + mimetype + ', ' + size + ', ' + path);
 
     res.writeHead('200', { 'Content-Type': 'text/html; charset=utf-8' });
     res.write('<h3>나의 메모</h3>');
     res.write('<hr>');
     res.write('<p>메모가 저장되었습니다.</p>');
+    res.write('<p>작성자 : ' + paramId + '</p>')
+    res.write('<p>작성일시 : ' + paramTime + '</p>')
+    res.write('<p>내용 : ' + paramTextfield + '</p>')
     res.write('<p>서버에 저장된 사진</p>');
-    res.write('<p>사진 미리보기</p>');
+    res.write(`<p><img src=${path} style="width:100px;height:auto"/></p>`);
     res.write('<p>사진 경로</p>');
+    res.write(`<p>${path}</p>`);
     res.write('<br><br><button type="button" onclick="location.href=&#39/public/photo.html&#39">다시작성</button>');
     res.end();
 });

@@ -15,7 +15,7 @@
         </tr>
         <tr>
           <td><label>작성일시</label></td>
-          <td><input type="text" id="currentDate" name="time" disabled /></td>
+          <td><input type="text" id="currentDate" name="time" /></td>
         </tr>
         <tr>
           <td><label>내용</label></td>
@@ -29,26 +29,58 @@
           </td>
         </tr>
         <tr>
-          <td><label>사진</label></td>
-          <td><input type="file" name="photo" /></td>
+          <td>
+            <label>사진</label
+            ><img
+              id="preview"
+              src="#"
+              alt="미리보기"
+              style="width:100px;height:auto"
+            />
+          </td>
+          <td><input type="file" id="photoUpload" name="photo" /></td>
         </tr>
       </table>
 
       <input type="submit" value="저장" name="submit" />
       <input type="button" value="닫기" name="submit" />
     </form>
-  </body>
-  <script type="text/javascript">
-    var date = new Date();
-    var currentDate =
-      date.getFullYear() +
-      "-" +
-      (date.getMonth() + 1) +
-      "-" +
-      date.getDate() +
-      " ";
-    var currentTime = date.getHours() + ":" + date.getMinutes();
+    <script
+      type="text/javascript"
+      src="http://code.jquery.com/jquery-2.1.0.min.js"
+    ></script>
+    <script type="text/javascript">
+      // 현재 날짜 계산
+      var date = new Date();
+      var currentDate =
+        date.getFullYear() +
+        "-" +
+        (date.getMonth() + 1) +
+        "-" +
+        date.getDate() +
+        " ";
+      var currentTime = date.getHours() + ":" + date.getMinutes();
 
-    document.getElementById("currentDate").value = currentDate + currentTime;
-  </script>
+      document.getElementById("currentDate").value = currentDate + currentTime;
+
+      // 미리 보기
+      $(function() {
+        $("#photoUpload").on("change", function() {
+          readURL(this);
+        });
+      });
+
+      function readURL(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function(e) {
+            $("#preview").attr("src", e.target.result);
+          };
+
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+    </script>
+  </body>
 </html>
