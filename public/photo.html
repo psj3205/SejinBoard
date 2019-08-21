@@ -2,20 +2,53 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>파일 업로드 테스트</title>
+    <title>나의 메모</title>
   </head>
   <body>
-    <h1>파일 업로드</h1>
+    <h1>나의 메모</h1>
     <br />
     <form method="post" enctype="multipart/form-data" action="/process/photo">
       <table>
         <tr>
-          <td><label>파일</label></td>
+          <td><label>작성자</label></td>
+          <td><input type="text" name="id" /></td>
+        </tr>
+        <tr>
+          <td><label>작성일시</label></td>
+          <td><input type="text" id="currentDate" name="time" disabled /></td>
+        </tr>
+        <tr>
+          <td><label>내용</label></td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <textarea
+              name="textfield"
+              style="width:240px; height:100px"
+            ></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td><label>사진</label></td>
           <td><input type="file" name="photo" /></td>
         </tr>
       </table>
 
-      <input type="submit" value="업로드" name="submit" />
+      <input type="submit" value="저장" name="submit" />
+      <input type="button" value="닫기" name="submit" />
     </form>
   </body>
+  <script type="text/javascript">
+    var date = new Date();
+    var currentDate =
+      date.getFullYear() +
+      "-" +
+      (date.getMonth() + 1) +
+      "-" +
+      date.getDate() +
+      " ";
+    var currentTime = date.getHours() + ":" + date.getMinutes();
+
+    document.getElementById("currentDate").value = currentDate + currentTime;
+  </script>
 </html>
