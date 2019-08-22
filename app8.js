@@ -30,20 +30,46 @@ app.use(expressSession({
 }));
 
 var MongoClient = require('mongodb').MongoClient;
+var mongoose = require('mongoose');
 
 var database;
+var UserSchema;
+var UserModel;
 
 var connectDB = () => {
-    var databaseUrl = 'mongodb://localhost:27017/local';
+    var databaseUrl = 'mongodb://localhost:27017/shopping';
+    // mongoose 모듈을 사용하여 데이터데비스에 연결할 경우//////////////////////////////////////
+    mongoose.connect(databaseUrl);
+    database = mongoose.connection;
 
-    MongoClient.connect(databaseUrl, (err, db) => {
-        if (err) throw err;
-
+    database.on('error', console.error.bind(console, 'mongoose connection error.'));
+    database.on('open', () => {
         console.log('데이터베이스에 연결되었습니다. : ' + databaseUrl);
-        console.log("connected:" + db);
-        //mongodb 버전 3.0이상을 사용할 때는, connection을 할 때에 database명을 명시해야 한다
-        database = db.db('local');
+
+        UserSchema = mongoose.Schema({
+            id: String,
+            name: String,
+            password: String
+        });
+
+        console.log('UserSchema 정의함.');
+
+        UserModel = mongoose.model('users', UserSchema);
+        console.log('UserModel 정의함');
     });
+    database.on('disconnected', connectDB);
+    /////////////////////////////////////////////////////////////////////////////////////////
+
+    // mongodb 모듈을 사용하여 데이터베이스에 연결할 경우///////////////////////////////////////
+    // MongoClient.connect(databaseUrl, (err, db) => {
+    //     if (err) throw err;
+
+    //     console.log('데이터베이스에 연결되었습니다. : ' + databaseUrl);
+    //     console.log("connected:" + db);
+    //     //mongodb 버전 3.0이상을 사용할 때는, connection을 할 때에 database명을 명시해야 한다
+    //     database = db.db('shopping');
+    // });
+    /////////////////////////////////////////////////////////////////////////////////////////
 };
 
 var router = express.Router();
@@ -84,6 +110,37 @@ router.route('/process/login').post((req, res) => {
     }
 });
 
+router.route('/process/adduser').post((req, res) => {
+    console.log('/process/adduser 호출됨.');
+
+    var paramId = req.body.id;
+    var paramPassword = req.body.password;
+    var parmaName = req.body.name;
+
+    if (database) {
+        addUser(database, paramId, paramPassword, parmaName, (err, result) => {
+            if (err) throw err;
+            if (result) {
+                console.dir(result);
+
+                res.writeHead('200', { 'Content-Type': 'text/html;charset=utf8' });
+                res.write('<h2>사용자 추가 성공</h2>');
+                res.end();
+            }
+            else {
+                res.writeHead('200', { 'Content-Type': 'text/htn=ml;charset=utf8' });
+                res.write('<h2>사용자 추가 실패</h2>');
+                res.end();
+            }
+        });
+    }
+    else {
+        res.writeHead('200', { 'Content-type': 'text/html;charset=utf8' });
+        res.write('<h2>데이터베이스 연결 실패</h2>');
+        res.end();
+    }
+});
+
 app.use('/', router);
 
 var errorHandler = expressErrorHandler({
@@ -105,20 +162,73 @@ http.createServer(app).listen(app.get('port'), () => {
 var authUser = (database, id, password, callback) => {
     console.log('authUser 호출됨');
 
-    var users = database.collection('users');
-    console.log(users);
-    users.find({ "id": id, "password": password }).toArray((err, docs) => {
+    // mongoose 모듈을 사용하여 사용자를 인증할 경우//////////////////////////////////////
+    UserModel.find({ "id": id, "password": password }, (err, results) => {
         if (err) {
             callback(err, null);
             return;
         }
-        if (docs.length > 0) {
-            console.log('아이디 [%s], 비밀번호 [%s]가 일치하는 사용자 찾음.', id, password);
-            callback(null, docs);
+
+        console.log('아이디 [%s], 비밀번호 [%s]로 사용자 검색 결과', id, password);
+        console.dir(results);
+
+        if (results.length > 0) {
+            console.log('일치하는 사용자 찾음.', id, password);
+            callback(null, results);
         }
         else {
             console.log('일치하는 사용자를 찾지 못함.');
             callback(null, null);
         }
     });
+    ///////////////////////////////////////////////////////////////////////////////////
+
+    // mongodb 모듈을 사용하여 사용자를 인증할 경우//////////////////////////////////////
+    // var users = database.collection('users');
+    // console.log(users);
+    // users.find({ "id": id, "password": password }).toArray((err, docs) => {
+    //     if (err) {
+    //         callback(err, null);
+    //         return;
+    //     }
+    //     if (docs.length > 0) {
+    //         console.log('아이디 [%s], 비밀번호 [%s]가 일치하는 사용자 찾음.', id, password);
+    //         callback(null, docs);
+    //     }
+    //     else {
+    //         console.log('일치하는 사용자를 찾지 못함.');
+    //         callback(null, null);
+    //     }
+    // });
+    ///////////////////////////////////////////////////////////////////////////////////
+};
+
+var addUser = (database, id, password, name, callback) => {
+    console.log('addUser 호출됨.');
+
+    // mongoose 모듈을 사용하여 사용자를 추가할 경우//////////////////////////////////////
+    var user = new UserModel({ "id": id, "password": password, "name": name });
+
+    user.save((err) => {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+
+        console.log('사용자 데이터 추가함.');
+        callback(null, user);
+    });
+    ///////////////////////////////////////////////////////////////////////////////////
+
+    // mongodb 모듈을 사용하여 사용자를 추가할 경우///////////////////////////////////////
+    // var users = database.collection('users');
+    // users.insert([{ "id": id, "password": password, "name": name }], (err, result) => {
+    //     if (err) {
+    //         callback(err, null);
+    //         return;
+    //     }
+    //     console.log('사용자 데이터 추가함.');
+    //     callback(null, result);
+    // });
+    ////////////////////////////////////////////////////////////////////////////////////
 };
