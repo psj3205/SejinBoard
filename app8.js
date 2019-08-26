@@ -36,6 +36,8 @@ var database;
 var UserSchema;
 var UserModel;
 
+var crypto = require('crypto');
+
 var connectDB = () => {
     var databaseUrl = 'mongodb://localhost:27017/shopping';
     // mongoose 모듈을 사용하여 데이터데비스에 연결할 경우//////////////////////////////////////
@@ -45,26 +47,7 @@ var connectDB = () => {
     database.on('error', console.error.bind(console, 'mongoose connection error.'));
     database.on('open', () => {
         console.log('데이터베이스에 연결되었습니다. : ' + databaseUrl);
-
-        UserSchema = mongoose.Schema({
-            id: { type: String, required: true, unique: true },
-            password: { type: String, required: true },
-            name: { type: String, index: 'hashed' },
-            age: { type: Number, 'default': -1 },
-            created_at: { type: Date, index: { unique: false }, 'default': Date.now },
-            updated_at: { type: Date, index: { unique: false }, 'default': Date.now }
-        });
-
-        UserSchema.static('findById', function (id, callback) { return this.find({ id: id }, callback); });
-        UserSchema.static('findAll', function (callback) {
-            console.log(this);
-            return this.find({}, callback);
-        });
-
-        console.log('UserSchema 정의함.');
-
-        UserModel = mongoose.model('users', UserSchema);
-        console.log('UserModel 정의함');
+        createUserSchema();
     });
     database.on('disconnected', connectDB);
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -217,7 +200,11 @@ var authUser = (database, id, password, callback) => {
         if (results.length > 0) {
             console.log('아이디와 일치하는 사용자 찾음.');
 
-            if (results[0]._doc.password === password) {
+            var user = new UserModel({ id: id });
+            var authenticated = user.authenticate(password, results[0]._doc.salt,
+                results[0]._doc.hashed_password);
+
+            if (authenticated) {
                 console.log('비밀번호 일치함');
                 callback(null, results);
             }
@@ -300,4 +287,66 @@ var addUser = (database, id, password, name, callback) => {
     //     callback(null, result);
     // });
     ////////////////////////////////////////////////////////////////////////////////////
+};
+
+var createUserSchema = () => {
+    UserSchema = mongoose.Schema({
+        id: { type: String, required: true, unique: true, 'default': ' ' },
+        hashed_password: { type: String, required: true, 'default': ' ' },
+        salt: { type: String, required: true },
+        name: { type: String, index: 'hashed', 'default': ' ' },
+        age: { type: Number, 'default': -1 },
+        created_at: { type: Date, index: { unique: false }, 'default': Date.now },
+        updated_at: { type: Date, index: { unique: false }, 'default': Date.now }
+    });
+
+    UserSchema.static('findById', function (id, callback) { return this.find({ id: id }, callback); });
+    UserSchema.static('findAll', function (callback) {
+        console.log(this);
+        return this.find({}, callback);
+    });
+
+    UserSchema
+        .virtual('password')
+        .set(function (password) {
+            this._password = password;
+            this.salt = this.makeSalt();
+            this.hashed_password = this.encryptPassword(password);
+            console.log('virtual password 호출됨 : ' + this.hashed_password);
+        })
+        .get(function () { return this._password });
+
+    UserSchema.method('encryptPassword', function (plainText, inSalt) {
+        if (inSalt) {
+            return crypto.createHmac('sha1', inSalt).update(plainText).digest('hex');
+        }
+        else {
+            return crypto.createHmac('sha1', this.salt).update(plainText).digest('hex');
+        }
+    });
+
+    UserSchema.method('makeSalt', () => {
+        return Math.round((new Date().valueOf() * Math.random())) + '';
+    });
+
+    UserSchema.method('authenticate', function (plainText, inSalt, hashed_password) {
+        if (inSalt) {
+            console.log('authenticate 호출됨 : %s -> %s : %s', plainText,
+                this.encryptPassword(plainText, inSalt), hashed_password);
+            return this.encryptPassword(plainText, inSalt) === hashed_password;
+        }
+        else {
+            console.log('authenticate 호출됨 : %s -> %s : %s', plainText,
+                this.encryptPassword(plainText), this.hashed_password);
+            return this.encryptPassword(plainText) === this.hashed_password;
+        }
+    });
+
+    UserSchema.path('id').validate(id => id.length, 'id 칼럼의 값이 없습니다.');
+    UserSchema.path('name').validate(name => name.length, 'name 칼럼의 값이 없습니다.');
+
+    console.log('UserSchema 정의함.');
+
+    UserModel = mongoose.model('users', UserSchema);
+    console.log('UserModel 정의함');
 };
