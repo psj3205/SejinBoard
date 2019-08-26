@@ -49,15 +49,36 @@ var upload = multer({
     }
 });
 
+var mongoose = require('mongoose');
+
+var database;
+var MemoSchema;
+var MemoModel;
+
+var connectDB = () => {
+    var databaseUrl = 'mongodb://localhost:27017/mymemo';
+
+    mongoose.connect(databaseUrl);
+    database = mongoose.connection;
+
+    database.on('error', console.error.bind(console, 'mongoose connection error.'));
+    database.on('open', () => {
+        console.log(`데이터베이스에 연결되었습니다. : ${databaseUrl}`);
+        createMemoSchema();
+    });
+    database.on('disconnected', connectDB);
+};
+
 var router = express.Router();
 
 router.route('/process/photo').post(upload.array('photo', 1), (req, res) => {
     console.log('/process/photo 호출됨.');
-    console.log(req.body);
+    // console.log(req.body);
     var paramId = req.body.id;
     var paramTime = req.body.time;
     var paramTextfield = req.body.textfield;
     var files = req.files;
+
 
     var originalname = '',
         name = '',
@@ -87,23 +108,85 @@ router.route('/process/photo').post(upload.array('photo', 1), (req, res) => {
     console.log('현재 파일 정보 : ' + originalname + ', '
         + name + ', ' + mimetype + ', ' + size + ', ' + path);
 
-    res.writeHead('200', { 'Content-Type': 'text/html; charset=utf-8' });
-    res.write('<h3>나의 메모</h3>');
-    res.write('<hr>');
-    res.write('<p>메모가 저장되었습니다.</p>');
-    res.write('<p>작성자 : ' + paramId + '</p>')
-    res.write('<p>작성일시 : ' + paramTime + '</p>')
-    res.write('<p>내용 : ' + paramTextfield + '</p>')
-    res.write('<p>서버에 저장된 사진</p>');
-    res.write(`<p><img src=${path} style="width:100px;height:auto"/></p>`);
-    res.write('<p>사진 경로</p>');
-    res.write(`<p>${path}</p>`);
-    res.write('<br><br><button type="button" onclick="location.href=&#39/public/photo.html&#39">다시작성</button>');
-    res.end();
+    if (database) {
+        addMemo(database, paramId, paramTime, paramTextfield, path, (err, result) => {
+            if (err) throw err;
+            if (result) {
+                res.writeHead('200', { 'Content-Type': 'text/html; charset=utf-8' });
+                res.write('<h3>나의 메모</h3>');
+                res.write('<hr>');
+                res.write('<p>메모가 저장되었습니다.</p>');
+                res.write('<p>작성자 : ' + paramId + '</p>')
+                res.write('<p>작성일시 : ' + paramTime + '</p>')
+                res.write('<p>내용 : ' + paramTextfield + '</p>')
+                res.write('<p>서버에 저장된 사진</p>');
+                res.write(`<p><img src=${path} style="width:100px;height:auto"/></p>`);
+                res.write('<p>사진 경로</p>');
+                res.write(`<p>${path}</p>`);
+                res.write('<br><br><button type="button" onclick="location.href=&#39/public/photo.html&#39">다시작성</button>');
+                res.end();
+            }
+            else {
+                res.writeHead('200', { 'Content-Type': 'text/html;charset=utf8' });
+                res.write('<h2>메모 저장 실패</h2>');
+                res.end();
+            }
+        });
+    }
+    else {
+        res.writeHead('200', { 'Content-type': 'text/html;charset=utf8' });
+        res.write('<h2>데이터베이스 연결 실패</h2>');
+        res.end();
+    }
+    // res.writeHead('200', { 'Content-Type': 'text/html; charset=utf-8' });
+    // res.write('<h3>나의 메모</h3>');
+    // res.write('<hr>');
+    // res.write('<p>메모가 저장되었습니다.</p>');
+    // res.write('<p>작성자 : ' + paramId + '</p>')
+    // res.write('<p>작성일시 : ' + paramTime + '</p>')
+    // res.write('<p>내용 : ' + paramTextfield + '</p>')
+    // res.write('<p>서버에 저장된 사진</p>');
+    // res.write(`<p><img src=${path} style="width:100px;height:auto"/></p>`);
+    // res.write('<p>사진 경로</p>');
+    // res.write(`<p>${path}</p>`);
+    // res.write('<br><br><button type="button" onclick="location.href=&#39/public/photo.html&#39">다시작성</button>');
+    // res.end();
 });
 
 app.use('/', router);
 
-http.createServer(app).listen(3000, () => {
-    console.log('Express 서버가 3000번 포트에서 시작됨.');
-})
+http.createServer(app).listen(app.get('port'), () => {
+    console.log(`서버가 시작되었습니다. 포트 : ${app.get('port')}`);
+
+    connectDB();
+});
+
+var createMemoSchema = () => {
+    MemoSchema = mongoose.Schema({
+        name: { type: String, index: 'hashed', 'default': ' ' },
+        memo: { type: String, 'default': ' ' },
+        createdDate: { type: String, 'default': ' ' },
+        filepath: { type: String, 'default': ' ' }
+    });
+
+    console.log('MemoSchema 정의함.');
+
+    MemoModel = mongoose.model('memos', MemoSchema);
+    console.log('MemoModel 정의함.');
+};
+
+var addMemo = (database, name, createdDate, memo, filepath, callback) => {
+    console.log('addMemo 호출됨.');
+
+    var memo = new MemoModel({ "name": name, "memo": memo, "createdDate": createdDate, "filepath": filepath });
+
+    memo.save((err) => {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+
+        console.log('메모 데이터 추가함.');
+        callback(null, memo);
+    })
+};

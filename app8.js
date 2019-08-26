@@ -120,7 +120,7 @@ router.route('/process/adduser').post((req, res) => {
                 res.end();
             }
             else {
-                res.writeHead('200', { 'Content-Type': 'text/htn=ml;charset=utf8' });
+                res.writeHead('200', { 'Content-Type': 'text/html;charset=utf8' });
                 res.write('<h2>사용자 추가 실패</h2>');
                 res.end();
             }
