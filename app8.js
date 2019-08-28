@@ -4,8 +4,8 @@ const express = require('express'),
 
 const bodyParser = require('body-parser'),
     cookieParser = require('cookie-parser'),
-    static = require('serve-static'),
-    errorHandler = require('errorhandler');
+    static = require('serve-static');
+//errorHandler = require('errorhandler');
 
 const expressErrorHandler = require('express-error-handler');
 
