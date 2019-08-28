@@ -1,17 +1,17 @@
-var express = require('express'),
+const express = require('express'),
     http = require('http'),
     path = require('path');
 
-var bodyParser = require('body-parser'),
+const bodyParser = require('body-parser'),
     cookieParser = require('cookie-parser'),
     static = require('serve-static'),
     errorHandler = require('errorhandler');
 
-var expressErrorHandler = require('express-error-handler');
+const expressErrorHandler = require('express-error-handler');
 
-var expressSession = require('express-session');
+const expressSession = require('express-session');
 
-var app = express();
+const app = express();
 
 app.set('port', process.env.PORT || 3000);
 
@@ -29,16 +29,15 @@ app.use(expressSession({
     saveUninitialized: true
 }));
 
-var MongoClient = require('mongodb').MongoClient;
 const mongoose = require('mongoose');
 const user = require('./routes/user');
 
-var database;
+let database;
 let UserSchema;
 let UserModel;
 
-var connectDB = () => {
-    var databaseUrl = 'mongodb://localhost:27017/shopping';
+const connectDB = () => {
+    const databaseUrl = 'mongodb://localhost:27017/shopping';
     // mongoose 모듈을 사용하여 데이터데비스에 연결할 경우//////////////////////////////////////
     mongoose.connect(databaseUrl);
     database = mongoose.connection;
@@ -51,17 +50,15 @@ var connectDB = () => {
     database.on('disconnected', connectDB);
 };
 
-var router = express.Router();
+const router = express.Router();
 
 router.route('/process/login').post(user.login);
-
 router.route('/process/adduser').post(user.adduser);
-
 router.route('/process/listuser').post(user.listuser);
 
 app.use('/', router);
 
-var errorHandler = expressErrorHandler({
+const errorHandler = expressErrorHandler({
     static: {
         '404': './public/404.html'
     }
