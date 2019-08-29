@@ -32,22 +32,21 @@ app.use(expressSession({
 const mongoose = require('mongoose');
 const user = require('./routes/user');
 
-let database;
-let UserSchema;
-let UserModel;
+const database = {};
+const UserSchema = require('./database/user_schema');
 
 const connectDB = () => {
     const databaseUrl = 'mongodb://localhost:27017/shopping';
     // mongoose 모듈을 사용하여 데이터데비스에 연결할 경우//////////////////////////////////////
     mongoose.connect(databaseUrl);
-    database = mongoose.connection;
+    database.connect = mongoose.connection;
 
-    database.on('error', console.error.bind(console, 'mongoose connection error.'));
-    database.on('open', () => {
+    database.connect.on('error', console.error.bind(console, 'mongoose connection error.'));
+    database.connect.on('open', () => {
         console.log('데이터베이스에 연결되었습니다. : ' + databaseUrl);
         createUserSchema();
     });
-    database.on('disconnected', connectDB);
+    database.connect.on('disconnected', connectDB);
 };
 
 const router = express.Router();
@@ -75,10 +74,8 @@ http.createServer(app).listen(app.get('port'), () => {
 });
 
 const createUserSchema = () => {
-    UserSchema = require('./database/user_schema');
-
-    UserModel = mongoose.model('users', UserSchema.createSchema(mongoose));
+    const UserModel = mongoose.model('users', UserSchema.createSchema(mongoose));
     console.log('UserModel 정의함');
 
-    user.init(database, UserSchema, UserModel);
+    user.init(database.connect, UserModel);
 };
