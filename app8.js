@@ -39,14 +39,14 @@ const connectDB = () => {
     const databaseUrl = 'mongodb://localhost:27017/shopping';
     // mongoose 모듈을 사용하여 데이터데비스에 연결할 경우//////////////////////////////////////
     mongoose.connect(databaseUrl);
-    database.connect = mongoose.connection;
+    database.db = mongoose.connection;
 
-    database.connect.on('error', console.error.bind(console, 'mongoose connection error.'));
-    database.connect.on('open', () => {
+    database.db.on('error', console.error.bind(console, 'mongoose connection error.'));
+    database.db.on('open', () => {
         console.log('데이터베이스에 연결되었습니다. : ' + databaseUrl);
         createUserSchema();
     });
-    database.connect.on('disconnected', connectDB);
+    database.db.on('disconnected', connectDB);
 };
 
 const router = express.Router();
@@ -77,5 +77,5 @@ const createUserSchema = () => {
     const UserModel = mongoose.model('users', UserSchema.createSchema(mongoose));
     console.log('UserModel 정의함');
 
-    user.init(database.connect, UserModel);
+    user.init(database.db, UserModel);
 };

@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const Schema = {};
 
 Schema.createSchema = (mongoose) => {
-    const UserSchema = mongoose.Schema({
+    const UserSchema = new mongoose.Schema({
         id: { type: String, required: true, unique: true, 'default': ' ' },
         hashed_password: { type: String, required: true, 'default': ' ' },
         salt: { type: String, required: true },
@@ -59,7 +59,7 @@ Schema.createSchema = (mongoose) => {
     UserSchema.path('name').validate(name => name.length, 'name 칼럼의 값이 없습니다.');
 
     console.log('UserSchema 정의함.');
-
+    console.log('UserSchema 의 타입 : ', typeof (UserSchema));
     return UserSchema;
 };
 
