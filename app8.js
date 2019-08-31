@@ -1,18 +1,16 @@
-const express = require('express'),
-    http = require('http'),
-    path = require('path');
-
-const bodyParser = require('body-parser'),
-    cookieParser = require('cookie-parser'),
-    static = require('serve-static');
-//errorHandler = require('errorhandler');
-
+const express = require('express');
+const http = require('http');
+const path = require('path');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const static = require('serve-static');
+const config = require('./config');
 const expressErrorHandler = require('express-error-handler');
-
 const expressSession = require('express-session');
-
+const route_loader = require('./routes/route_loader');
 const app = express();
 
+console.log(`config.server_port : ${config.server_port}`);
 app.set('port', process.env.PORT || 3000);
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -29,53 +27,17 @@ app.use(expressSession({
     saveUninitialized: true
 }));
 
-const mongoose = require('mongoose');
-const user = require('./routes/user');
-
-const database = {};
-const UserSchema = require('./database/user_schema');
-
-const connectDB = () => {
-    const databaseUrl = 'mongodb://localhost:27017/shopping';
-    // mongoose 모듈을 사용하여 데이터데비스에 연결할 경우//////////////////////////////////////
-    mongoose.connect(databaseUrl);
-    database.db = mongoose.connection;
-
-    database.db.on('error', console.error.bind(console, 'mongoose connection error.'));
-    database.db.on('open', () => {
-        console.log('데이터베이스에 연결되었습니다. : ' + databaseUrl);
-        createUserSchema();
-    });
-    database.db.on('disconnected', connectDB);
-};
-
-const router = express.Router();
-
-router.route('/process/login').post(user.login);
-router.route('/process/adduser').post(user.adduser);
-router.route('/process/listuser').post(user.listuser);
-
-app.use('/', router);
-
 const errorHandler = expressErrorHandler({
     static: {
         '404': './public/404.html'
     }
 });
 
+route_loader.init(app);
+
 app.use(expressErrorHandler.httpError(404));
 app.use(errorHandler);
 
 http.createServer(app).listen(app.get('port'), () => {
     console.log('서버가 시작되었습니다. 포트: ' + app.get('port'));
-
-    // 데이터베이스 연결
-    connectDB();
 });
-
-const createUserSchema = () => {
-    const UserModel = mongoose.model('users', UserSchema.createSchema(mongoose));
-    console.log('UserModel 정의함');
-
-    user.init(database.db, UserModel);
-};

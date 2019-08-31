@@ -1,21 +1,12 @@
-const database = {};
-const UserModel = {};
-
-const init = (db, model) => {
-    console.log('init 호출됨.');
-
-    database.db = db;
-    UserModel.model = model;
-};
-
 const login = (req, res) => {
     console.log('user 모듈 안에 있는 login 호출됨.');
 
     const paramId = req.body.id;
     const paramPassword = req.body.password;
+    const database = req.app.get('database');
 
-    if (database.db) {
-        authUser(database.db, paramId, paramPassword, (err, docs) => {
+    if (database) {
+        authUser(database, paramId, paramPassword, (err, docs) => {
             if (err) throw err;
             if (docs) {
                 console.dir(docs);
@@ -50,9 +41,10 @@ const adduser = (req, res) => {
     const paramId = req.body.id;
     const paramPassword = req.body.password;
     const parmaName = req.body.name;
+    const database = req.app.get('database');
 
-    if (database.db) {
-        addUser(database.db, paramId, paramPassword, parmaName, (err, result) => {
+    if (database) {
+        addUser(database, paramId, paramPassword, parmaName, req, (err, result) => {
             if (err) throw err;
             if (result) {
                 console.dir(result);
@@ -77,9 +69,11 @@ const adduser = (req, res) => {
 
 const listuser = (req, res) => {
     console.log('user 모듈 안에 있는 listuser 호출됨.');
+    const database = req.app.get('database');
+    const UserModel = database.UserModel;
 
-    if (database.db) {
-        UserModel.model.findAll((err, results) => {
+    if (database) {
+        UserModel.findAll((err, results) => {
             if (err) {
                 callback(err, null);
                 return;
@@ -110,9 +104,10 @@ const listuser = (req, res) => {
 
 const authUser = (database, id, password, callback) => {
     console.log('authUser 호출됨');
+    const UserModel = database.UserModel;
 
     // mongoose 모듈을 사용하여 사용자를 인증할 경우//////////////////////////////////////
-    UserModel.model.findById(id, (err, results) => {
+    UserModel.findById(id, (err, results) => {
         if (err) {
             callback(err, null);
             return;
@@ -124,7 +119,7 @@ const authUser = (database, id, password, callback) => {
         if (results.length > 0) {
             console.log('아이디와 일치하는 사용자 찾음.');
 
-            const user = new UserModel.model({ id: id });
+            const user = new UserModel({ id: id });
             const authenticated = user.authenticate(password, results[0]._doc.salt,
                 results[0]._doc.hashed_password);
 
@@ -144,11 +139,16 @@ const authUser = (database, id, password, callback) => {
     });
 };
 
-const addUser = (database, id, password, name, callback) => {
+const addUser = (database, id, password, name, req, callback) => {
     console.log('addUser 호출됨.');
+    const UserModel = database.UserModel;
 
     // mongoose 모듈을 사용하여 사용자를 추가할 경우//////////////////////////////////////
-    const user = new UserModel.model({ "id": id, "password": password, "name": name });
+    const user = new UserModel({
+        "id": id,
+        "password": password,
+        "name": name
+    });
 
     user.save((err) => {
         if (err) {
@@ -160,7 +160,6 @@ const addUser = (database, id, password, name, callback) => {
     });
 };
 
-module.exports.init = init;
 module.exports.login = login;
 module.exports.adduser = adduser;
 module.exports.listuser = listuser;
