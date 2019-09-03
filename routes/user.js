@@ -11,12 +11,27 @@ const login = (req, res) => {
             if (docs) {
                 console.dir(docs);
 
+                const username = docs[0].name;
+
                 res.writeHead('200', { 'Content-Type': 'text/html;charset=utf8' });
-                res.write('<h1>로그인 성공!</h1>');
-                res.write(`<div><p>사용자 아이디 : ${paramId}</p></div>`);
-                res.write(`<div><p>사용자 이름 : ${docs[0].name}</p></div>`);
-                res.write(`<br><br><a href='/public/login.html'>다시 로그인 하기</a>`);
-                res.end();
+
+                const context = {
+                    userid: paramId,
+                    username: username
+                };
+                req.app.render('login_success', context, (err, html) => {
+                    if (err) {
+                        console.error(`뷰 렌더링 중 오류 발생 : ${err.stack}`);
+
+                        res.writeHead('200', { 'Content-Type': 'text/html;charset=utf8' });
+                        res.write(`<h2>뷰 렌더링 중 오류 발생</h2>`);
+                        res.write(`<p>${err.stack}</p>`);
+                        res.end();
+                        return;
+                    }
+                    console.log(`rendered : ${html}`);
+                    res.end(html);
+                });
             }
             else {
                 res.writeHead('200', { 'Content-Type': 'text/html;charset=utf8' });
@@ -50,8 +65,22 @@ const adduser = (req, res) => {
                 console.dir(result);
 
                 res.writeHead('200', { 'Content-Type': 'text/html;charset=utf8' });
-                res.write('<h2>사용자 추가 성공</h2>');
-                res.end();
+
+                const context = { title: '사용자 추가 성공' };
+                req.app.render('adduser', context, (err, html) => {
+                    if (err) {
+                        console.error(`뷰 렌더링 중 오류 발생 : err.stack`);
+
+                        res.writeHead('200', { 'Content-Type': 'text/html;charset=utf8' });
+                        res.write('<h2>뷰 렌더링 중 오류 발생</h2>');
+                        res.write(`<p>${err.stack}</p>`);
+                        res.end();
+
+                        return;
+                    }
+                    console.log(`rendered : ${html}`);
+                    res.end(html);
+                });
             }
             else {
                 res.writeHead('200', { 'Content-Type': 'text/html;charset=utf8' });
@@ -75,23 +104,26 @@ const listuser = (req, res) => {
     if (database) {
         UserModel.findAll((err, results) => {
             if (err) {
-                callback(err, null);
+                console.log(`사용자 리스트 조회 중 오류 발생 : ${err.stack}`);
+
+                res.writeHead('200', { 'Content-Type': 'text/html;charset=utf8' });
+                res.write('<h2>사용자 리스트 조회 중 오류 발생</h2>');
+                res.write(`<p>err.stack</p>`);
+                res.end();
+
                 return;
             }
             if (results) {
                 // console.dir(results);
 
                 res.writeHead('200', { 'Content-Type': 'text/html;charset=utf8' });
-                res.write('<h2>사용자 리스트</h2>');
-                res.write('<div><ul>');
-                for (let i = 0; i < results.length; i++) {
-                    let curId = results[i]._doc.id;
-                    let curName = results[i]._doc.name;
-                    res.write(`<li># ${i} :  ${curId}, ${curName} </li>`);
-                }
 
-                res.write('</ul></div>');
-                res.end();
+                const context = { results: results };
+                req.app.render('listuser', context, (err, html) => {
+                    if (err) { throw err; }
+                    console.log(`rendered : ${html}`);
+                    res.end(html);
+                });
             }
             else {
                 res.writeHead('200', { 'Content-Type': 'text/html;charset=utf8' });
@@ -99,6 +131,11 @@ const listuser = (req, res) => {
                 res.end();
             }
         });
+    }
+    else {
+        res.writeHead('200', { 'Content-Type': 'text/html;charset=utf8' });
+        res.write('<h2>데이터베이스 연결 실패</h2>');
+        res.end();
     }
 };
 
