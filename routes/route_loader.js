@@ -1,12 +1,31 @@
 const route_loader = {};
 const config = require('../config');
 const database = require('../database/database');
+const multer = require('multer');
 
 route_loader.init = (app) => {
     console.log('route_loader.init 호출됨.');
     database.init(app, config);
     return initRoutes(app);
 };
+
+const storage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        callback(null, 'uploads/');
+    },
+    filename: (req, file, callback) => {
+        callback(null, Date.now() + file.originalname);
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        files: 10,
+        fileSize: 1024 * 1024 * 1024
+    }
+});
+
 
 const initRoutes = (app) => {
     const infoLen = config.route_info.length;
@@ -31,6 +50,11 @@ const initRoutes = (app) => {
         else if (curItem.type == 'post') {
             console.log('=============post=============');
             app.post(curItem.path, curModule[curItem.method]);
+            console.log(curModule[curItem.method]);
+        }
+        else if (curItem.type == 'post&upload') {
+            console.log('=============post&upload=============');
+            app.post(curItem.path, upload.array('photo', 1), curModule[curItem.method]);
             console.log(curModule[curItem.method]);
         }
 

@@ -7,6 +7,7 @@ const static = require('serve-static');
 const config = require('./config');
 const expressErrorHandler = require('express-error-handler');
 const expressSession = require('express-session');
+const cors = require('cors');
 const route_loader = require('./routes/route_loader');
 const app = express();
 
@@ -17,18 +18,16 @@ app.set('view engine', 'ejs');
 console.log('뷰 엔진이 ejs로 설정되었습니다.');
 
 app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use(bodyParser.json());
-
 app.use('/public', static(path.join(__dirname, 'public')));
-
+app.use('/uploads', static(path.join(__dirname, 'uploads')));
 app.use(cookieParser());
-
 app.use(expressSession({
     secret: 'my key',
     resave: true,
     saveUninitialized: true
 }));
+app.use(cors());
 
 const errorHandler = expressErrorHandler({
     static: {

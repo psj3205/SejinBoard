@@ -6,6 +6,11 @@ module.exports = {
         collection: 'users',
         schemaName: 'UserSchema',
         modelName: 'UserModel'
+    }, {
+        file: '../database/memo_schema',
+        collection: 'memo',
+        schemaName: 'MemoSchema',
+        modelName: 'MemoModel'
     }],
     route_info: [{
         file: './user',
@@ -22,5 +27,10 @@ module.exports = {
         path: '/process/listuser',
         method: 'listuser',
         type: 'post'
+    }, {
+        file: './memo',
+        path: '/process/photo',
+        method: 'addmemo',
+        type: 'post&upload'
     }]
 };
