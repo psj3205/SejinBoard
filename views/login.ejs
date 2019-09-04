@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width = device-width, height = device-height, initial-scale = 1"
+    />
+    <title>로그인 화면</title>
+    <link
+      rel="stylesheet"
+      href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"
+    />
+    <!-- load bootstrap css -->
+    <link
+      rel="stylesheet"
+      href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"
+    />
+    <!-- load fontawesome -->
+    <style>
+      body {
+        padding-top: 80px;
+      }
+
+      @font-face {
+        font-family: "Nanum Gothic";
+        font-style: normal;
+        font-weight: 400;
+        src: url("../public/font/NanumGothic-Regular.eot");
+        src: local("NanumGothic"),
+          url("../public/font/NanumGothic-Regular.eot?#iefix")
+            format("embedded-opentype"),
+          url("../public/font/NanumGothic-Regular.woff2") format("woff2"),
+          url("../public/font/NanumGothic-Regular.woff") format("woff"),
+          url("../public/font/NanumGothic-Regular.ttf") format("truetype");
+      }
+
+      h1,
+      p,
+      a {
+        font-family: "Nanum Gothic";
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-6 col-sm-offset-3">
+        <h1><span class="fa fa-sign-in"></span>로그인</h1>
+
+        <% if(message.length > 0) {%>
+        <div class="alert alert-danger"><%= message %></div>
+        <% } %>
+
+        <form action="/login" method="post">
+          <div class="form-group">
+            <label>이메일</label>
+            <input type="text" class="form-control" name="email" />
+          </div>
+          <div class="form-group">
+            <label>비밀번호</label>
+            <input type="password" class="form-control" name="password" />
+          </div>
+
+          <button type="submit" class="btn btn-warning btn-lg">로그인</button>
+        </form>
+        <hr />
+        <p>계정이 없으세요? <a href="/signup">회원가입하기</a></p>
+        <p><a href="/">홈으로</a></p>
+      </div>
+    </div>
+  </body>
+</html>

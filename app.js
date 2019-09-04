@@ -4,10 +4,12 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const static = require('serve-static');
-const config = require('./config');
+const config = require('./config/config');
 const expressErrorHandler = require('express-error-handler');
 const expressSession = require('express-session');
 const cors = require('cors');
+const passport = require('passport');
+const flash = require('connect-flash');
 const route_loader = require('./routes/route_loader');
 const app = express();
 
@@ -28,14 +30,23 @@ app.use(expressSession({
     saveUninitialized: true
 }));
 app.use(cors());
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
+route_loader.init(app);
+
+const configPassport = require('./config/passport');
+configPassport(app, passport);
+
+const userPassport = require('./routes/user_passport');
+userPassport(app, passport);
 
 const errorHandler = expressErrorHandler({
     static: {
         '404': './public/404.html'
     }
 });
-
-route_loader.init(app);
 
 app.use(expressErrorHandler.httpError(404));
 app.use(errorHandler);
