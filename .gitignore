@@ -1,2 +1,5 @@
 bin/
 node_modules/
+semantic.json
+semantic/
+config/config.js

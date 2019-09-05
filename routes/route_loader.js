@@ -31,14 +31,6 @@ const initRoutes = (app) => {
     const infoLen = config.route_info.length;
     console.log(`설정에 정의됨 라우팅 모듈의 수 : ${infoLen}`);
 
-    // app.get('/', (req, res, next) => {
-    //     console.log('첫 번째 미들웨어에서 요청 처리함.');
-    //     res.writeHead('200', {
-    //         'Content-Type': 'text/html;charset=utf8'
-    //     });
-    //     res.end('<h1>Express 서버 응답 결과 </h1>');
-    // });
-
     for (let i = 0; i < infoLen; i++) {
         const curItem = config.route_info[i];
         const curModule = require(curItem.file);

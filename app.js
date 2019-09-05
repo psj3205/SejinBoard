@@ -10,7 +10,6 @@ const expressSession = require('express-session');
 const cors = require('cors');
 const passport = require('passport');
 const flash = require('connect-flash');
-const route_loader = require('./routes/route_loader');
 const app = express();
 
 console.log(`config.server_port : ${config.server_port}`);
@@ -34,6 +33,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
+const route_loader = require('./routes/route_loader');
 route_loader.init(app);
 
 const configPassport = require('./config/passport');

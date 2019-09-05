@@ -53,13 +53,24 @@
       <div class="row">
         <div class="col-sm-6">
           <div class="well">
+            <% if(user.provider == undefined || user.provider == '') { %>
             <h3><span class="fa fa-user"></span>로컬 프로필 정보</h3>
             <br />
             <p>
               <strong>이메일</strong> : <%= user.email %><br /><br />
               <strong>이름</strong> : <%= user.name %>
             </p>
+            <% } else if (user.provider == 'facebook') { %>
+            <h3 class="text-primary">
+              <span class="fa fa-facebook"></span>페이스북 프로필 정보
+            </h3>
             <br />
+            <p>
+              <strong>아이디</strong> : <% user._json.id %><br /><br />
+              <strong>이메일</strong> : <% user._json.email %><br /><br />
+              <strong>이름</strong> : <% user._json.name %>
+            </p>
+            <% } %>
           </div>
         </div>
       </div>

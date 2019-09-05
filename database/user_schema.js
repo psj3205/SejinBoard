@@ -5,18 +5,20 @@ const Schema = {};
 Schema.createSchema = (mongoose) => {
     const UserSchema = new mongoose.Schema({
         email: { type: String, 'default': ' ' }
-        , hashed_password: { type: String, required: true, 'default': ' ' }
-        , salt: { type: String, required: true }
+        , hashed_password: { type: String, 'default': ' ' }
+        , salt: { type: String }
         , name: { type: String, index: 'hashed', 'default': ' ' }
         , created_at: { type: Date, index: { unique: false }, 'default': Date.now }
         , updated_at: { type: Date, index: { unique: false }, 'default': Date.now }
+        , provider: { type: String, 'default': '' }
+        , authToken: { type: String, 'default': '' }
+        , facebook: {}
     });
 
     UserSchema.static('findByEmail', function (email, callback) {
         return this.find({ email: email }, callback);
     });
     UserSchema.static('findAll', function (callback) {
-        // console.log(this);
         return this.find({}, callback);
     });
 
@@ -61,8 +63,14 @@ Schema.createSchema = (mongoose) => {
         return hashed_password.length;
     }, 'hashed_password 칼럼의 값이 없습니다.');
 
+    UserSchema.static('load', function (options, callback) {
+        options.select = options.select || 'name';
+        this.findOne(options.criteria)
+            .select(options.select)
+            .exec(callback);
+    });
+
     console.log('UserSchema 정의함.');
-    console.log('UserSchema 의 타입 : ', typeof (UserSchema));
     return UserSchema;
 };
 
