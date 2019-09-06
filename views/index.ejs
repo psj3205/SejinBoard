@@ -22,6 +22,54 @@
         padding-top: 80px;
       }
 
+      input,
+      .btn {
+        width: 60%;
+        padding: 12px;
+        font-weight: bold;
+        border: none;
+        border-radius: 4px;
+        margin: 5px 0;
+        opacity: 0.85;
+        display: inline-block;
+        font-size: 17px;
+        line-height: 20px;
+        text-decoration: none; /* remove underline from anchors */
+      }
+
+      .fb {
+        background-color: #3b5998;
+        color: white;
+        font-weight: bold;
+      }
+
+      .naver {
+        background-color: #1ec800;
+        color: #ffffff;
+        font-weight: bold;
+      }
+
+      .kakao {
+        background-color: #f7e317;
+        color: #1e1e1e;
+        font-weight: bold;
+      }
+
+      .google {
+        background-color: #4285f4;
+        color: #ffffff;
+        font-weight: bold;
+      }
+
+      /* Two-column layout */
+      .col {
+        float: left;
+        width: 50%;
+        margin: auto;
+        padding: 0 50px;
+        margin-top: 6px;
+      }
+
       @font-face {
         font-family: "Nanum Gothic";
         font-style: normal;
@@ -46,21 +94,34 @@
   <body>
     <div class="container">
       <div class="jumbotron text-center">
-        <h1><span class="fa fa-shopping-cart"></span>쇼핑몰 홈</h1>
+        <h1><span></span>홈</h1>
         <br />
         <p>로그인하세요.</p>
         <p>계정이 없으시면 회원가입하세요.</p>
-        <br />
         <a href="/login" class="btn btn-default">
-          <span class="fa fa-user"></span>로그인
+          <span class="fa fa-user"></span> 로그인
         </a>
         <a href="/signup" class="btn btn-default">
-          <span class="fa fa-user"></span>회원가입
+          <span class="fa fa-user"></span> 회원가입
         </a>
-        <a href="/auth/facebook" class="btn btn-primary">
-          <span class="fa fa-facebook"></span>
+        <br />
+        <a href="/auth/naver" class="naver btn">
+          네이버 로그인
+        </a>
+        <br />
+        <a href="/auth/kakao" class="kakao btn">
+          카카오 로그인
+        </a>
+        <br />
+        <a href="/auth/google" class="google btn">
+          <span class="fa fa-google"></span>
+          구글 로그인
+        </a>
+        <br />
+        <a href="/auth/facebook" class="fb btn">
           페이스북 로그인
         </a>
+        <br />
       </div>
     </div>
   </body>

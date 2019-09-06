@@ -12,7 +12,7 @@ Schema.createSchema = (mongoose) => {
         , updated_at: { type: Date, index: { unique: false }, 'default': Date.now }
         , provider: { type: String, 'default': '' }
         , authToken: { type: String, 'default': '' }
-        , facebook: {}
+        , id: { type: String, 'default': ' ' }
     });
 
     UserSchema.static('findByEmail', function (email, callback) {
@@ -66,7 +66,7 @@ Schema.createSchema = (mongoose) => {
     UserSchema.static('load', function (options, callback) {
         options.select = options.select || 'name';
         this.findOne(options.criteria)
-            .select(options.select)
+            // .select(options.select)
             .exec(callback);
     });
 

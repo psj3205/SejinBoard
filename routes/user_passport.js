@@ -56,8 +56,27 @@ module.exports = (app, passport) => {
     app.get('/auth/facebook', passport.authenticate('facebook', {
         scope: 'email'
     }));
-
     app.get('/auth/facebook/callback', passport.authenticate('facebook', {
+        successRedirect: '/profile',
+        failureRedirect: '/'
+    }));
+
+    app.get('/auth/kakao', passport.authenticate('login-kakao'));
+    app.get('/oauth', passport.authenticate('login-kakao', {
+        successRedirect: '/profile',
+        failureRedirect: '/'
+    }));
+
+    app.get('/auth/google', passport.authenticate('google', {
+        scope: ['email', 'profile']
+    }));
+    app.get('/auth/google/callback', passport.authenticate('google', {
+        successRedirect: '/profile',
+        failureRedirect: '/'
+    }));
+
+    app.get('/auth/naver', passport.authenticate('naver'));
+    app.get('/auth/naver/callback', passport.authenticate('naver', {
         successRedirect: '/profile',
         failureRedirect: '/'
     }));

@@ -60,15 +60,14 @@
               <strong>이메일</strong> : <%= user.email %><br /><br />
               <strong>이름</strong> : <%= user.name %>
             </p>
-            <% } else if (user.provider == 'facebook') { %>
+            <% } else { %>
             <h3 class="text-primary">
-              <span class="fa fa-facebook"></span>페이스북 프로필 정보
+              <%= user.provider %> 프로필 정보
             </h3>
             <br />
             <p>
-              <strong>아이디</strong> : <% user._json.id %><br /><br />
-              <strong>이메일</strong> : <% user._json.email %><br /><br />
-              <strong>이름</strong> : <% user._json.name %>
+              <strong>이메일</strong> : <%= user.email %><br /><br />
+              <strong>이름</strong> : <%= user.name %>
             </p>
             <% } %>
           </div>

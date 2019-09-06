@@ -15,9 +15,16 @@ module.exports = new LocalStrategy({
             console.log('계정이 일치하지 않음.');
             return done(null, false, req.flash('loginMessage', '등록된 계정이 없습니다.'));
         }
-
-        const authenticated = user.authenticate(password, user._doc.salt, user._doc.hashed_password);
-        if (!authenticated) {
+        // auth 로그인 email이 아닌 경우
+        if (user.provider === '') {
+            const authenticated = user.authenticate(password, user._doc.salt, user._doc.hashed_password);
+            if (!authenticated) {
+                console.log('비밀번호 일치하지 않음.');
+                return done(null, false, req.flash('loginMessage', '비밀번호가 일치하지 않습니다.'));
+            }
+        }
+        // auth 로그인 email로 로컬 로그인 시도하면 이곳으로 빠지게한다. authenticate()에서 오류발생하므로
+        else {
             console.log('비밀번호 일치하지 않음.');
             return done(null, false, req.flash('loginMessage', '비밀번호가 일치하지 않습니다.'));
         }
