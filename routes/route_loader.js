@@ -37,7 +37,7 @@ const initRoutes = (app) => {
 
         if (curItem.type == 'get') {
             console.log('=============get=============');
-            app.post(curItem.path, curModule[curItem.method]);
+            app.get(curItem.path, curModule[curItem.method]);
         }
         else if (curItem.type == 'post') {
             console.log('=============post=============');

@@ -3,3 +3,5 @@ node_modules/
 semantic.json
 semantic/
 config/config.js
+public/cleditor/
+public/summernote/
