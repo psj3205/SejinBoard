@@ -1,6 +1,7 @@
 const route_loader = {};
 const config = require('../config/config');
 const database = require('../database/database');
+const uitil = require('../utils/utils');
 const multer = require('multer');
 
 route_loader.init = (app) => {
@@ -35,19 +36,26 @@ const initRoutes = (app) => {
         const curItem = config.route_info[i];
         const curModule = require(curItem.file);
 
-        if (curItem.type == 'get') {
+        if (curItem.type === 'get') {
             console.log('=============get=============');
-            app.get(curItem.path, curModule[curItem.method]);
+            if (curItem.auth === true)
+                app.get(curItem.path, uitil.isLoggedin, curModule[curItem.method]);
+            else
+                app.get(curItem.path, curModule[curItem.method]);
         }
-        else if (curItem.type == 'post') {
+        else if (curItem.type === 'post') {
             console.log('=============post=============');
-            app.post(curItem.path, curModule[curItem.method]);
-            console.log(curModule[curItem.method]);
+            if (curItem.auth === true)
+                app.post(curItem.path, uitil.isLoggedin, curModule[curItem.method]);
+            else
+                app.post(curItem.path, curModule[curItem.method]);
         }
-        else if (curItem.type == 'post&upload') {
+        else if (curItem.type === 'post&upload') {
             console.log('=============post&upload=============');
-            app.post(curItem.path, upload.array('photo', 1), curModule[curItem.method]);
-            console.log(curModule[curItem.method]);
+            if (curItem.auth === true)
+                app.post(curItem.path, uitil.isLoggedin, upload.array('photo', 1), curModule[curItem.method]);
+            else
+                app.post(curItem.path, upload.array('photo', 1), curModule[curItem.method]);
         }
 
         console.log(`라우팅 모듈 ${curItem.method}가 설정됨.`);

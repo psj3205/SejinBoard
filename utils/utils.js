@@ -18,3 +18,13 @@ exports.indexOf = (arr, obj) => {
     });
     return index;
 };
+
+exports.isLoggedin = function (req, res, next) {
+    if (req.isAuthenticated()) {
+        next();
+    } 
+    else {
+        req.flash("errors", { login: "Please login first" });
+        res.redirect("/login");
+    }
+};

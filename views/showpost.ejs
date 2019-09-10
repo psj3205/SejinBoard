@@ -69,10 +69,6 @@
 
         $("#contentsOutput").html(output);
       });
-
-      const goBackToList = () => {
-        window.history.go(-1);
-      };
     </script>
   </head>
 
@@ -107,7 +103,7 @@
         </div>
         <br /><br /><a
           class="ui button"
-          onclick="goBackToList()"
+          href="/process/listpost?page=0&perPage=2"
           >글 목록</a
         >
       </div>

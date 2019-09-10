@@ -1,5 +1,9 @@
 const Entities = require('html-entities').AllHtmlEntities;
 
+const openpost = (req, res) =>{
+    res.render('openpost.ejs');
+};
+
 const addpost = (req, res) => {
     console.log('post 모듈 안에 있는 addpost 호출됨.');
 
@@ -157,5 +161,6 @@ const listpost = (req, res) => {
 };
 
 module.exports.addpost = addpost;
+module.exports.openpost = openpost;
 module.exports.showpost = showpost;
 module.exports.listpost = listpost;
