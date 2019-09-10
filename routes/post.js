@@ -76,11 +76,9 @@ const showpost = (req, res) => {
             if (results) {
                 // console.dir(results);
                 res.writeHead('200', { 'Content-Type': 'text/html;charset=utf8' });
-                console.log("???????????????????????????");
-                console.log(results._doc);
-                results._doc.views++;
+                results.views++;
                 results.save();
-                console.log("???????????????????????????");
+
                 const context = {
                     title: '글 조회',
                     posts: results,
@@ -89,7 +87,7 @@ const showpost = (req, res) => {
 
                 req.app.render('showpost', context, (err, html) => {
                     if (err) { throw err; }
-                    console.log(`응답 문서 : ${html}`);
+                    // console.log(`응답 문서 : ${html}`);
                     res.end(html);
                 });
             }

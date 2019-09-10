@@ -57,7 +57,7 @@
     <script>
       function listpost(page, perPage) {
         document.location =
-          "/process/listpost?page=" + page + "&perPage=" + perPage;
+          `/process/listpost?page=${page}&perPage=${perPage}`;
       }
     </script>
   </head>
@@ -87,6 +87,8 @@
                   const curContents = posts[i]._doc.contents; 
                   const curWriter = posts[i]._doc.writer.email; 
                   const curNo = noStart - i; 
+                  const curviews = posts[i]._doc.views;
+                  const createdTime = posts[i]._doc.created_at;
               %>
               <div class="item">
                 <div class="ui grid">
@@ -102,12 +104,12 @@
                     </h5>
                   </div>
                   <div class="two wide column">
-                    <h5 class=ui left aligned orange header">
-                      2015-06-01
+                    <h5 class="ui left aligned orange header">
+                      <%= createdTime %>
                     </h5>
                   </div>
                   <div class="two wide column">
-                      <%= 
+                      <%= curviews %>
                   </div>
                 </div>
               </div>
@@ -186,7 +188,7 @@
               %>
             </div>
             <br /><br />
-            <a class="ui button" href="/process/listpost?page=0&perPage=2">재요청</a>
+            <a class="ui button" href="/process/listpost?page=<%= page %>&perPage=<%= perPage%>">재요청</a>
             <a class="ui button" href="/public/addpost.html">글쓰기</a>
           </div>
         </div>

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const database = {};
 
 database.init = (app, config) => {
-    console.log('init() 호출됨.');
+    console.log('database.init() 호출됨.');
     connect(app, config);
 };
 

@@ -8,7 +8,7 @@ Schema.createSchema = (mongoose) => {
         , contents: { type: String, trim: true, 'default': '' }
         , writer: { type: mongoose.Schema.ObjectId, ref: 'users6' }
         , tags: { type: [], 'default': '' }
-        , views: {type:Number, 'default': 0}
+        , views: { type:Number, 'default': 0 }
         , created_at: { type: Date, index: { unique: false }, 'default': Date.now }
         , updated_at: { type: Date, index: { unique: false }, 'default': Date.now }
         , comments: [{
@@ -57,7 +57,7 @@ Schema.createSchema = (mongoose) => {
             this.findOne({ _id: id })
                 .populate('writer', 'name provider email')
                 .populate('comments.writer')
-                .exec(callback)
+                .exec(callback);
         },
         list: function (options, callback) {
             const criteria = options.criteria || {};
@@ -67,7 +67,7 @@ Schema.createSchema = (mongoose) => {
                 .sort({ 'created_at': -1 })
                 .limit(Number(options.perPage))
                 .skip(options.perPage * options.page)
-                .exec(callback)
+                .exec(callback);
         }
     };
     console.log('PostSchema 정의함.');

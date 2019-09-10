@@ -63,12 +63,16 @@
     <script src="/public/cleditor/jquery.cleditor.min.js"></script>
 
     <script>
-      $(document).ready(function() {
+      $(document).ready(function () {
         var output = $("#contentsOutput").text();
         console.log("output : " + output);
 
         $("#contentsOutput").html(output);
       });
+
+      const goBackToList = () => {
+        window.history.go(-1);
+      };
     </script>
   </head>
 
@@ -103,7 +107,7 @@
         </div>
         <br /><br /><a
           class="ui button"
-          href="/process/listpost?page=0&perPage=2"
+          onclick="goBackToList()"
           >글 목록</a
         >
       </div>
