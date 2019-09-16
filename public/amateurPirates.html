@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Unity WebGL Player | AmateurPirates</title>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" />
+  <!-- load bootstrap css -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
+  <!-- load fontawesome -->
+  <style>
+    body {
+      padding-top: 80px;
+    }
+
+    @font-face {
+      font-family: "Nanum Gothic";
+      font-style: normal;
+      font-weight: 400;
+      src: url("../public/font/NanumGothic-Regular.eot");
+      src: local("NanumGothic"),
+        url("../public/font/NanumGothic-Regular.eot?#iefix") format("embedded-opentype"),
+        url("../public/font/NanumGothic-Regular.woff2") format("woff2"),
+        url("../public/font/NanumGothic-Regular.woff") format("woff"),
+        url("../public/font/NanumGothic-Regular.ttf") format("truetype");
+    }
+
+    h1,
+    p,
+    a {
+      font-family: "Nanum Gothic";
+    }
+  </style>
+
+  <link rel="shortcut icon" href="./TemplateData/favicon.ico">
+  <link rel="stylesheet" href="./TemplateData/style.css">
+  <script src="./TemplateData/UnityProgress.js"></script>
+  <script src="./Build/UnityLoader.js"></script>
+  <script>
+    // var gameInstance = UnityLoader.instantiate("gameContainer", "./Build/webglbulid.json", {onProgress: UnityProgress});
+    var gameInstance = UnityLoader.instantiate("gameContainer", "./Build/webglbulid.json", { onProgress: UnityProgress });
+  </script>
+</head>
+
+<body>
+  <div class="webgl-content">
+    <a href="/profile" class="btn btn-default btn-sm">메인화면으로</a>
+    <div id="gameContainer" style="width: 960px; height: 600px"></div>
+    <div class="footer">
+      <div class="webgl-logo"></div>
+      <div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div>
+      <div class="title">AmateurPirates</div>
+    </div>
+  </div>
+</body>
+
+</html>
