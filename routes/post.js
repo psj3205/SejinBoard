@@ -1,4 +1,6 @@
 const Entities = require('html-entities').AllHtmlEntities;
+const moment = require('moment');
+moment.locale('ko');
 
 const openpost = (req, res) =>{
     res.render('openpost.ejs');
@@ -78,7 +80,7 @@ const showpost = (req, res) => {
             }
 
             if (results) {
-                // console.dir(results);
+                console.dir(results);
                 res.writeHead('200', { 'Content-Type': 'text/html;charset=utf8' });
                 results.views++;
                 results.save();
@@ -86,7 +88,8 @@ const showpost = (req, res) => {
                 const context = {
                     title: '글 조회',
                     posts: results,
-                    Entities: Entities
+                    Entities: Entities,
+                    moment // moment 모듈 전달
                 };
 
                 req.app.render('showpost', context, (err, html) => {
@@ -139,7 +142,8 @@ const listpost = (req, res) => {
                         pageCount: Math.ceil(count / paramPerPage),
                         perPage: paramPerPage,
                         totalRecords: count,
-                        size: paramPerPage
+                        size: paramPerPage,
+                        moment  // moment 모듈 전달
                     };
 
                     req.app.render('listpost', context, (err, html) => {

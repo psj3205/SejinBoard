@@ -7,7 +7,7 @@
       content="width = device-width, height = device-height, initial-scale = 1"
     />
     <title>글 보기</title>
-    <link rel="stylesheet" href="/public/stylesheets/semantic.min.css" />
+    <link rel="stylesheet" href="/public/semantic/out/semantic.min.css" />
     <link rel="stylesheet" href="/public/cleditor/jquery.cleditor.css" />
 
     <style>
@@ -59,7 +59,7 @@
     </style>
 
     <script src="/public/jquery-3.1.1.min.js"></script>
-    <script src="/public/javascripts/semantic.min.js"></script>
+    <script src="/public/semantic/out/semantic.min.js"></script>
     <script src="/public/cleditor/jquery.cleditor.min.js"></script>
 
     <script>
@@ -80,14 +80,17 @@
 
         <div class="ui blue fluid card">
           <div class="content">
-            <% const curTitle = posts._doc.title; const curContents =
-            posts._doc.contents; const curWriter = posts._doc.writer.email;
-            console.log(curWriter); const entities = new Entities(); const
-            decodedContents = entities.decode(curContents); %>
+            <% const curTitle = posts._doc.title; 
+            const curContents = posts._doc.contents; 
+            const curWriter = posts._doc.writer.name;
+            const createdTime = moment(posts._doc.created_at).format("LLL");
+            console.log(curWriter); 
+            const entities = new Entities(); 
+            const decodedContents = entities.decode(curContents); %>
 
             <div id="titleOutput" class="header"><%= curTitle %></div>
             <div class="meta">
-              <span class="right floated time">1일전</span>
+              <span class="right floated time"><%= createdTime %></span>
               <span class="category">일반</span>
             </div>
             <div id="contentsOutput" class="description">

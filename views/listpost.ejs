@@ -7,8 +7,7 @@
       content="width = device-width, height = device-height, initial-scale = 1"
     />
     <title>글 리스트</title>
-    <link rel="stylesheet" href="/public/stylesheets/semantic.min.css" />
-
+    
     <style>
       * {
         padding: 0;
@@ -50,10 +49,12 @@
         font-weight: bold;
         color: teal;
       }
+      
     </style>
+    <link rel="stylesheet" href="/public/semantic/out/semantic.min.css" />
     <script src="/public/jquery-3.1.1.min.js"></script>
-    <script src="/public/javascripts/semantic.min.js"></script>
-
+    <script src="/public/semantic/out/semantic.min.js"></script>
+    
     <script>
       function listpost(page, perPage) {
         document.location =
@@ -85,10 +86,10 @@
               for(let i = 0; i < posts.length; i++){ 
                   const curTitle = posts[i]._doc.title; 
                   const curContents = posts[i]._doc.contents; 
-                  const curWriter = posts[i]._doc.writer.email; 
+                  const curWriter = posts[i]._doc.writer.name; 
                   const curNo = noStart - i; 
                   const curviews = posts[i]._doc.views;
-                  const createdTime = posts[i]._doc.created_at;
+                  const createdTime = moment(posts[i]._doc.created_at).format("MMM Do");
               %>
               <div class="item">
                 <div class="ui grid">
@@ -119,20 +120,20 @@
             <div id="page_button" class="tiny ui basic buttons">
               <% if(page > 0){ %>
               <div class="ui icon button" onclick="listpost(0, <%= perPage %>)">
-                <i class="fast backward icon"></i>
+                <i class="angle double left icon"></i>
               </div>
               <div
                 class="ui icon button"
                 onclick="listpost(<%= (page - 1) %>, <%= perPage %>)"
               >
-                <i class="left chevron icon"></i>
+                <i class="angle left icon"></i>
               </div>
               <% } else { %>
               <div class="ui disabled icon button">
-                <i class="fast backward icon"></i>
+                <i class="angle double left icon"></i>
               </div>
               <div class="ui disabled icon button">
-                <i class="left chevron icon"></i>
+                <i class="angle left icon"></i>
               </div>
 
               <% } %> 
@@ -168,20 +169,20 @@
               <div
                 class="ui icon button"
                 onclick="listpost(<%= (page+1) %>, <%= perPage %>)">
-                <i class="right chevron icon"></i>
+                <i class="angle right icon"></i>
               </div>
               <div
                 class="ui icon button"
                 onclick="listpost(<%= (pageCount - 1) %>, <%= perPage %>)">
-                <i class="fast forward icon"></i>
+                <i class="angle double right icon"></i>
               </div>
               <% } 
               else { %>
               <div class="ui disabled icon button">
-                <i class="right chevron icon"></i>
+                <i class="angle right icon"></i>
               </div>
               <div class="ui disabled icon button">
-                <i class="fast forward icon"></i>
+                <i class="angle double right icon"></i>
               </div>
               <% 
               } 
