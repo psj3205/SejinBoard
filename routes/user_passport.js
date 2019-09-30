@@ -1,7 +1,8 @@
 module.exports = (app, passport) => {
     app.get('/', (req, res) => {
         console.log('/ 패스 요청됨.');
-        res.render('index.ejs');
+        console.log(req.user);
+        res.render('mainpage.ejs', { user: req.user });
     });
 
     app.get('/login', (req, res) => {
@@ -10,7 +11,7 @@ module.exports = (app, passport) => {
     });
 
     app.post('/login', passport.authenticate('local-login', {
-        successRedirect: '/profile',
+        successRedirect: '/',
         failureRedirect: '/login',
         failureFlash: true
     }));
@@ -21,7 +22,7 @@ module.exports = (app, passport) => {
     });
 
     app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect: '/profile',
+        successRedirect: '/',
         failureRedirect: '/signup',
         failureFlash: true
     }));
@@ -57,13 +58,13 @@ module.exports = (app, passport) => {
         scope: 'email'
     }));
     app.get('/auth/facebook/callback', passport.authenticate('facebook', {
-        successRedirect: '/profile',
+        successRedirect: '/',
         failureRedirect: '/'
     }));
 
     app.get('/auth/kakao', passport.authenticate('login-kakao'));
     app.get('/oauth', passport.authenticate('login-kakao', {
-        successRedirect: '/profile',
+        successRedirect: '/',
         failureRedirect: '/'
     }));
 
@@ -71,13 +72,13 @@ module.exports = (app, passport) => {
         scope: ['email', 'profile']
     }));
     app.get('/auth/google/callback', passport.authenticate('google', {
-        successRedirect: '/profile',
+        successRedirect: '/',
         failureRedirect: '/'
     }));
 
     app.get('/auth/naver', passport.authenticate('naver'));
     app.get('/auth/naver/callback', passport.authenticate('naver', {
-        successRedirect: '/profile',
+        successRedirect: '/',
         failureRedirect: '/'
     }));
 }

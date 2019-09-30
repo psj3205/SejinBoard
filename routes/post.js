@@ -2,8 +2,18 @@ const Entities = require('html-entities').AllHtmlEntities;
 const moment = require('moment');
 moment.locale('ko');
 
+// 글작성 페이지 연다.
 const openpost = (req, res) =>{
-    res.render('openpost.ejs');
+    const context = {
+        moment, // moment 모듈 전달
+        user: req.user // 로그인 정보 전달
+    };
+
+    res.render('openpost.ejs', context, (err, html) => {
+        if (err) { throw err; }
+        // console.log(`응답 문서 : ${html}`);
+        res.end(html);
+    });
 };
 
 const addpost = (req, res) => {
@@ -44,7 +54,7 @@ const addpost = (req, res) => {
             const post = new database.PostModel({
                 title: paramTitle,
                 contents: paramContents,
-                writer: userObjectId
+                writer: userObjectId,
             });
 
             post.savePost((err, result) => {
@@ -89,7 +99,8 @@ const showpost = (req, res) => {
                     title: '글 조회',
                     posts: results,
                     Entities: Entities,
-                    moment // moment 모듈 전달
+                    moment, // moment 모듈 전달
+                    user: req.user // 로그인 정보 전달
                 };
 
                 req.app.render('showpost', context, (err, html) => {
@@ -143,7 +154,8 @@ const listpost = (req, res) => {
                         perPage: paramPerPage,
                         totalRecords: count,
                         size: paramPerPage,
-                        moment  // moment 모듈 전달
+                        moment,  // moment 모듈 전달
+                        user : req.user // 로그인 정보 전달
                     };
 
                     req.app.render('listpost', context, (err, html) => {

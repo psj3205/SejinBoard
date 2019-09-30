@@ -1,93 +1,157 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width = device-width, height = device-height, initial-scale = 1"
-    />
-    <title>글 보기</title>
-    <link rel="stylesheet" href="/public/semantic/out/semantic.min.css" />
-    <link rel="stylesheet" href="/public/cleditor/jquery.cleditor.css" />
+<html lang="en">
 
-    <style>
-      * {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-      }
+<head>
 
-      html {
-        width: 100%;
-        height: 100%;
-      }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <!-- Bootstrap core CSS -->
+  <link href="/public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-      body {
-        width: 100%;
-        height: 100%;
-        color: #000;
-        background-color: #fff;
-      }
+  <!-- Custom styles for this template -->
+  <!-- <link href="css/simple-sidebar.css" rel="stylesheet"> -->
+  <link href="/public/css/simple-sidebar.css" rel="stylesheet">
 
-      .container {
-        margin-right: auto;
-        margin-left: auto;
-        padding-left: 20px;
-        padding-right: 20px;
-      }
+  <% const curTitle = posts._doc.title; 
+  const curContents = posts._doc.contents; 
+  const curWriter = posts._doc.writer.name;
+  const createdTime = moment(posts._doc.created_at).format("LLL");
+  console.log(curWriter); 
+  const entities = new Entities(); 
+  const decodedContents = entities.decode(curContents); %>
+  <title><%= curTitle %></title>
+  <link rel="stylesheet" href="/public/semantic/out/semantic.min.css" />
+  <link rel="stylesheet" href="/public/cleditor/jquery.cleditor.css" />
 
-      span {
-        color: #999;
-      }
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
 
-      #titleOutput {
-        margin-bottom: 10px;
-        line-height: 1.2em;
-      }
+    html {
+      width: 100%;
+      height: 100%;
+    }
 
-      #contentsOutput {
-        margin-top: 10px;
-        margin-bottom: 10px;
-        line-height: 1.8em;
-      }
+    body {
+      width: 100%;
+      height: 100%;
+      color: #000;
+      background-color: #fff;
+    }
 
-      #board_title {
-        font-size: 1.2em;
-        font-weight: bold;
-        color: teal;
-      }
-    </style>
+    .container {
+      margin-right: auto;
+      margin-left: auto;
+      padding-left: 5px;
+      padding-right: 5px;
+    }
 
-    <script src="/public/jquery-3.1.1.min.js"></script>
-    <script src="/public/semantic/out/semantic.min.js"></script>
-    <script src="/public/cleditor/jquery.cleditor.min.js"></script>
+    span {
+      color: #999;
+    }
 
-    <script>
-      $(document).ready(function () {
-        var output = $("#contentsOutput").text();
-        console.log("output : " + output);
+    #titleOutput {
+      margin-bottom: 10px;
+      line-height: 1.2em;
+    }
 
-        $("#contentsOutput").html(output);
-      });
-    </script>
-  </head>
+    #contentsOutput {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      line-height: 1.8em;
+    }
 
-  <body>
-    <div class="container">
-      <div class="ui riased segment">
-        <a class="ui blue ribbon label">게시판</a>
-        <span id="board_title"><%= title %></span>
+    #board_title {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: teal;
+    }
+  </style>
 
+  <script src="/public/jquery-3.1.1.min.js"></script>
+  <script src="/public/semantic/out/semantic.min.js"></script>
+  <script src="/public/cleditor/jquery.cleditor.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      var output = $("#contentsOutput").text();
+      console.log("output : " + output);
+
+      $("#contentsOutput").html(output);
+    });
+  </script>
+</head>
+
+<body>
+
+  <div class="d-flex" id="wrapper">
+
+    <!-- Sidebar -->
+    <div class="bg-light border-right" id="sidebar-wrapper">
+      <div class="sidebar-heading">
+        <a href="/">Sejin Board </a>
+      </div>
+      <div class="list-group list-group-flush">
+        <form id="boardbtn" method="post" action="/process/listpost">
+          <input type="hidden" name="page" value="0" />
+          <input type="hidden" name="perPage" value="5" />
+          <a href="#" class="list-group-item list-group-item-action bg-light"
+            onclick="document.getElementById('boardbtn').submit();">게시판</a>
+        </form>
+        <a href="/public/amateurPirates.html" class="list-group-item list-group-item-action bg-light">게임</a>
+        <a href="#" class="list-group-item list-group-item-action bg-light">Three.js 연습장</a>
+      </div>
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+
+      <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+              <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                계정
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                <% if(!user) { %>
+                <a class="dropdown-item" href="/login">로그인</a>
+                <% } else { %>
+                <a class="dropdown-item" href="/logout">로그아웃</a>
+                <% } %>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="container">
+        <br />
+        <a class="ui blue label">게시판</a>
         <div class="ui blue fluid card">
           <div class="content">
-            <% const curTitle = posts._doc.title; 
-            const curContents = posts._doc.contents; 
-            const curWriter = posts._doc.writer.name;
-            const createdTime = moment(posts._doc.created_at).format("LLL");
-            console.log(curWriter); 
-            const entities = new Entities(); 
-            const decodedContents = entities.decode(curContents); %>
-
             <div id="titleOutput" class="header"><%= curTitle %></div>
             <div class="meta">
               <span class="right floated time"><%= createdTime %></span>
@@ -104,12 +168,28 @@
             </div>
           </div>
         </div>
-        <br /><br /><a
-          class="ui button"
-          href="/process/listpost?page=0&perPage=2"
-          >글 목록</a
-        >
+        <br /><br /><a class="ui button" href="/process/listpost?page=0&perPage=5">글 목록</a>
       </div>
     </div>
-  </body>
+  </div>
+  </div>
+  <!-- /#page-content-wrapper -->
+
+  </div>
+  <!-- /#wrapper -->
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="/public/vendor/jquery/jquery.min.js"></script>
+  <script src="/public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Menu Toggle Script -->
+  <script>
+    $("#menu-toggle").click(function (e) {
+      e.preventDefault();
+      $("#wrapper").toggleClass("toggled");
+    });
+  </script>
+
+</body>
+
 </html>

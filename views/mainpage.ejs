@@ -9,80 +9,6 @@
   <meta name="author" content="">
 
   <title>Sejin Board</title>
-  <title>글 작성</title>
-  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../public/semantic/out/semantic.min.css" />
-  <link rel="stylesheet" href="../public/summernote/summernote.css" />
-
-  <style>
-    * {
-      padding: 0;
-      margin: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      width: 100%;
-      height: 100%;
-    }
-
-    body {
-      width: 100%;
-      height: 100%;
-      color: #000;
-      background-color: #fff;
-    }
-
-    .popover {
-      display: none !important;
-    }
-
-    .container {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-flow: column wrap;
-      align-items: center;
-      /* justify-content: center; */
-      margin-top: 5em;
-    }
-
-    #iconImage {
-      display: inline;
-    }
-
-    #titleText {
-      font-size: 1.4em;
-      font-weight: bold;
-      color: #777;
-    }
-
-    #contentsText {
-      color: #999;
-    }
-
-    #form1 {
-      padding: 1em;
-    }
-
-    .row {
-      height: 3em;
-    }
-
-    .col1 {
-      height: 3em;
-    }
-
-    .inputbox {
-      width: 20em;
-    }
-
-    #buttonContainer {
-      padding-top: 3em;
-      padding-right: 1em;
-      text-align: right;
-    }
-  </style>
 
   <!-- Bootstrap core CSS -->
   <link href="/public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -154,34 +80,7 @@
       </nav>
 
       <div class="container-fluid">
-        <div id="cardbox" class="ui blue fluid card">
-          <form class="content ui form" method="post" action="/process/addpost">
-            <h4 class="ui dividing header">글 쓰기 입력 항목</h4>
-            <div class="two fields">
-              <div class="field">
-                <label>제목</label>
-                <input type="text" name="title" placeholder="제목 입력" />
-              </div>
-              <div class="field"></div>
-            </div>
-
-            <div class="two fields">
-              <div class="field">
-                <label>작성자: <%= user.name %></label>
-                <input type="hidden" name="writer" value="<%= user.email %>" />
-              </div>
-              <div class="field"></div>
-            </div>
-
-            <div class="field">
-              <label>내용</label>
-              <textarea name="contents" id="summernote" cols="80" rows="50"></textarea>
-            </div>
-
-            <input class="ui submit button" type="submit" value="추가" , name="" />
-            <input class="ui button" type="button" value="취소" name="" onclick="javascript:window.history.back()" />
-          </form>
-        </div>
+        <h1 class="mt-4">Sejin Board</h1>
       </div>
     </div>
     <!-- /#page-content-wrapper -->
@@ -192,35 +91,12 @@
   <!-- Bootstrap core JavaScript -->
   <script src="/public/vendor/jquery/jquery.min.js"></script>
   <script src="/public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../public/summernote/summernote.js"></script>
-  <script src="../public/semantic/out/semantic.min.js"></script>
+
   <!-- Menu Toggle Script -->
   <script>
     $("#menu-toggle").click(function (e) {
       e.preventDefault();
       $("#wrapper").toggleClass("toggled");
-    });
-  </script>
-  <script>
-    $(document).ready(function () {
-      $("#summernote").summernote({
-        height: 300, // set editor height
-        minHeight: null, // set minimum height of editor
-        maxHeight: null, // set maximum height of editor
-        focus: true,
-        toolbar: [    // [groupName, [list of button]]
-          ['style', ['style']],
-          ['font', ['bold', 'italic', 'underline', 'clear']],
-          ['fontname', ['fontname']],
-          ['color', ['color']],
-          ['para', ['ul', 'ol', 'paragraph']],
-          ['height', ['height']],
-          ['table', ['table']],
-          ['insert', ['link', 'picture', 'hr']],
-          ['view', ['fullscreen', 'codeview']],
-          ['help', ['help']]
-        ]
-      });
     });
   </script>
 
