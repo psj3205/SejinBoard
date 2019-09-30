@@ -1,7 +1,7 @@
 const route_loader = {};
 const config = require('../config/config');
 const database = require('../database/database');
-const uitil = require('../utils/utils');
+const util = require('../utils/utils');
 const multer = require('multer');
 
 route_loader.init = (app) => {
@@ -39,21 +39,21 @@ const initRoutes = (app) => {
         if (curItem.type === 'get') {
             console.log('=============get=============');
             if (curItem.auth === true)
-                app.get(curItem.path, uitil.isLoggedin, curModule[curItem.method]);
+                app.get(curItem.path, util.isLoggedin, curModule[curItem.method]);
             else
                 app.get(curItem.path, curModule[curItem.method]);
         }
         else if (curItem.type === 'post') {
             console.log('=============post=============');
             if (curItem.auth === true)
-                app.post(curItem.path, uitil.isLoggedin, curModule[curItem.method]);
+                app.post(curItem.path, util.isLoggedin, curModule[curItem.method]);
             else
                 app.post(curItem.path, curModule[curItem.method]);
         }
         else if (curItem.type === 'post&upload') {
             console.log('=============post&upload=============');
             if (curItem.auth === true)
-                app.post(curItem.path, uitil.isLoggedin, upload.array('photo', 1), curModule[curItem.method]);
+                app.post(curItem.path, util.isLoggedin, upload.array('photo', 1), curModule[curItem.method]);
             else
                 app.post(curItem.path, upload.array('photo', 1), curModule[curItem.method]);
         }
