@@ -110,7 +110,8 @@
             onclick="document.getElementById('boardbtn').submit();">게시판</a>
         </form>
         <a href="/public/amateurPirates.html" class="list-group-item list-group-item-action bg-light">게임</a>
-        <a href="/public/Three.js/skeleton.html" class="list-group-item list-group-item-action bg-light">Three.js 연습장</a>
+        <a href="/public/Three.js/skeleton.html" class="list-group-item list-group-item-action bg-light">Three.js
+          연습장</a>
       </div>
     </div>
     <!-- /#sidebar-wrapper -->
@@ -131,13 +132,17 @@
             <li class="nav-item active">
               <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link" href="#">Link</a>
-            </li>
+            </li> -->
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
+                <% if(!user) { %>
                 계정
+                <% } else { %>
+                <%= user.name %>
+                <% } %>
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                 <% if(!user) { %>
@@ -155,16 +160,8 @@
 
       <div class="container-fluid">
         <div id="cardbox" class="ui blue fluid card">
-          <form class="content ui form" method="post" action="/process/addpost">
-            <h4 class="ui dividing header">글 쓰기 입력 항목</h4>
-            <div class="two fields">
-              <div class="field">
-                <label>제목</label>
-                <input type="text" name="title" placeholder="제목 입력" />
-              </div>
-              <div class="field"></div>
-            </div>
-
+          <form class="content ui form" method="post" action="/process/addpost" , onsubmit="return validateForm();">
+            <h4 class="ui dividing header">새 글 쓰기</h4>
             <div class="two fields">
               <div class="field">
                 <label>작성자: <%= user.name %></label>
@@ -172,13 +169,19 @@
               </div>
               <div class="field"></div>
             </div>
-
+            <div class="two fields">
+              <div class="field">
+                <label>제목</label>
+                <input id="postTitle" type="text" name="title" placeholder="제목 입력" />
+              </div>
+              <div class="field"></div>
+            </div>
             <div class="field">
               <label>내용</label>
               <textarea name="contents" id="summernote" cols="80" rows="50"></textarea>
             </div>
-
-            <input class="ui submit button" type="submit" value="추가" , name="" />
+            <div class="alert alert-danger" id="alertMsg" style="display: none"></div>
+            <input class="ui submit button" type="submit" value="작성" , name="" />
             <input class="ui button" type="button" value="취소" name="" onclick="javascript:window.history.back()" />
           </form>
         </div>
@@ -201,6 +204,7 @@
       $("#wrapper").toggleClass("toggled");
     });
   </script>
+  <!-- summernote script -->
   <script>
     $(document).ready(function () {
       $("#summernote").summernote({
@@ -223,7 +227,39 @@
       });
     });
   </script>
+  <!-- validate input script -->
+  <script>
+    const validateForm = () => {
+      const titleLength = document.getElementById('postTitle').value.length;
+      const contentLength = $('#summernote').summernote('isEmpty');
+      console.log('titleLength:', titleLength);
+      console.log('contentLength:', contentLength);
+      console.log('contentValue:', $("#summernote").val());
+      if (titleLength === 0 && contentLength === true) {
+        document.getElementById("alertMsg").innerHTML = "제목과 내용을 입력하세요.";
+        // 경고창 보이게 설정
+        document.getElementById("alertMsg").style.display = '';
+        return false;
+      }
+      else if (titleLength === 0) {
+        document.getElementById("alertMsg").innerHTML = "제목을 입력하세요.";
+        // 경고창 보이게 설정
+        document.getElementById("alertMsg").style.display = '';
+        return false;
+      }
+      else if(contentLength === true) {
+        document.getElementById("alertMsg").innerHTML = "내용을 입력하세요.";
+        // 경고창 보이게 설정
+        document.getElementById("alertMsg").style.display = '';
+        return false;
+      }
 
+      if(confirm("글 작성을 완료하시겠습니까?"))
+        return true;
+      else
+        return false;
+    };
+  </script>
 </body>
 
 </html>
