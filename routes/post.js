@@ -1,5 +1,5 @@
 const Entities = require('html-entities').AllHtmlEntities;
-const moment = require('moment');
+const moment = require('moment-timezone');
 moment.locale('ko');
 
 // 새글 작성 페이지 열기.

@@ -159,7 +159,7 @@
                           const curWriter = posts[i]._doc.writer.name; 
                           const curNo = noStart - i; 
                           const curviews = posts[i]._doc.views;
-                          const createdTime = moment(posts[i]._doc.created_at).format("MMM Do");
+                          const createdTime = moment(posts[i]._doc.created_at).tz("Asia/Seoul").format("MMM Do");
                       %>
               <div class="item">
                 <div class="ui grid">

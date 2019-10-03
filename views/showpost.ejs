@@ -18,7 +18,7 @@
   const curContents = posts._doc.contents; 
   const curWriter = posts._doc.writer.name;
   const curWriteEmail = posts._doc.writer.email;
-  const createdTime = moment(posts._doc.created_at).format("LLL");
+  const createdTime = moment(posts._doc.created_at).tz("Asia/Seoul").format("LLL");
   const entities = new Entities(); 
   const decodedContents = entities.decode(curContents); %>
   <title><%= curTitle %></title>
@@ -173,11 +173,12 @@
             </div>
           </div>
         </div>
-        <br /><br /><a class="ui button" href="/process/listpost?page=0&perPage=5">글 목록</a>
+        <br />
+        <a class="ui button" href="/process/listpost?page=0&perPage=5">글 목록</a>
         <% if(user && curWriteEmail === user.email) { %>
-        <form id="deleteBtn" method="post" action="/process/deletepost", onsubmit="return confirmForm();" style="display: inline">
+        <form id="deleteBtn" method="post" action="/process/deletepost", onsubmit="return confirmForm();" style="float: right">
           <input type="hidden" name="postId" value="<%= posts._doc._id %>" />
-          <input class="ui submit button" type="submit" value="삭제" , name="" />
+          <input class="ui submit button" type="submit" value="삭제" , name="" style="background-color: lightcoral; color:white" />
           <!-- <a href="#" class="ui button" onclick="document.getElementById('deleteBtn').submit();">삭제</a> -->
         </form>
         <% } %>
