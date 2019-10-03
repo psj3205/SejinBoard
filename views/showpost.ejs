@@ -17,8 +17,8 @@
   <% const curTitle = posts._doc.title; 
   const curContents = posts._doc.contents; 
   const curWriter = posts._doc.writer.name;
+  const curWriteEmail = posts._doc.writer.email;
   const createdTime = moment(posts._doc.created_at).format("LLL");
-  console.log(curWriter); 
   const entities = new Entities(); 
   const decodedContents = entities.decode(curContents); %>
   <title><%= curTitle %></title>
@@ -104,7 +104,8 @@
             onclick="document.getElementById('boardbtn').submit();">게시판</a>
         </form>
         <a href="/public/amateurPirates.html" class="list-group-item list-group-item-action bg-light">게임</a>
-        <a href="/public/Three.js/skeleton.html" class="list-group-item list-group-item-action bg-light">Three.js 연습장</a>
+        <a href="/public/Three.js/skeleton.html" class="list-group-item list-group-item-action bg-light">Three.js
+          연습장</a>
       </div>
     </div>
     <!-- /#sidebar-wrapper -->
@@ -173,6 +174,13 @@
           </div>
         </div>
         <br /><br /><a class="ui button" href="/process/listpost?page=0&perPage=5">글 목록</a>
+        <% if(user && curWriteEmail === user.email) { %>
+        <form id="deleteBtn" method="post" action="/process/deletepost", onsubmit="return confirmForm();" style="display: inline">
+          <input type="hidden" name="postId" value="<%= posts._doc._id %>" />
+          <input class="ui submit button" type="submit" value="삭제" , name="" />
+          <!-- <a href="#" class="ui button" onclick="document.getElementById('deleteBtn').submit();">삭제</a> -->
+        </form>
+        <% } %>
       </div>
     </div>
   </div>
@@ -193,7 +201,15 @@
       $("#wrapper").toggleClass("toggled");
     });
   </script>
-
+  <script>
+    const confirmForm = () => {
+      console.log("@@@@@@@@@@@@@@@@@@@");
+      if (confirm("삭제 하시겠습니까?"))
+        return true;
+      else
+        return false;
+    };
+  </script>
 </body>
 
 </html>

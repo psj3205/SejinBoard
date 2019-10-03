@@ -232,9 +232,7 @@
     const validateForm = () => {
       const titleLength = document.getElementById('postTitle').value.length;
       const contentLength = $('#summernote').summernote('isEmpty');
-      console.log('titleLength:', titleLength);
-      console.log('contentLength:', contentLength);
-      console.log('contentValue:', $("#summernote").val());
+
       if (titleLength === 0 && contentLength === true) {
         document.getElementById("alertMsg").innerHTML = "제목과 내용을 입력하세요.";
         // 경고창 보이게 설정

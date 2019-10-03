@@ -68,7 +68,10 @@ Schema.createSchema = (mongoose) => {
                 .limit(Number(options.perPage))
                 .skip(options.perPage * options.page)
                 .exec(callback);
-        }
+        },
+        deletePost: function(id, callback) {
+            this.remove({ _id: id }, callback);
+        },
     };
     console.log('PostSchema 정의함.');
 
