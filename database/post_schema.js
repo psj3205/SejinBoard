@@ -72,6 +72,9 @@ Schema.createSchema = (mongoose) => {
         deletePost: function(id, callback) {
             this.remove({ _id: id }, callback);
         },
+        updatePost: function(id, update, callback) {
+            this.findByIdAndUpdate({ _id: id }, update, callback);
+        }
     };
     console.log('PostSchema 정의함.');
 

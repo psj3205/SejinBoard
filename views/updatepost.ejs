@@ -9,10 +9,10 @@
   <meta name="author" content="">
 
   <title>Sejin Board</title>
-  <title>글 작성</title>
+  <title>글 수정</title>
   <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../public/semantic/out/semantic.min.css" />
-  <link rel="stylesheet" href="../public/summernote/summernote.css" />
+  <link rel="stylesheet" href="/public/semantic/out/semantic.min.css" />
+  <link rel="stylesheet" href="/public/summernote/summernote.css" />
 
   <style>
     * {
@@ -159,8 +159,8 @@
 
       <div class="container-fluid">
         <div id="cardbox" class="ui blue fluid card">
-          <form class="content ui form" method="post" action="/process/addpost" , onsubmit="return validateForm();">
-            <h4 class="ui dividing header">새 글쓰기</h4>
+          <form class="content ui form" method="post" action="/process/updatepost" , onsubmit="return validateForm();">
+            <h4 class="ui dividing header">글 수정</h4>
             <div class="two fields">
               <div class="field">
                 <label>작성자: <%= user.name %></label>
@@ -171,16 +171,17 @@
             <div class="two fields">
               <div class="field">
                 <label>제목</label>
-                <input id="postTitle" type="text" name="title" placeholder="제목 입력" />
+                <input id="postTitle" type="text" name="title" placeholder="제목 입력" value="<%= posts._doc.title%>"/>
               </div>
               <div class="field"></div>
             </div>
             <div class="field">
               <label>내용</label>
-              <textarea name="contents" id="summernote" cols="80" rows="50"></textarea>
+              <textarea name="contents" id="summernote" cols="80" rows="50"><%= posts._doc.contents%></textarea>
             </div>
             <div class="alert alert-danger" id="alertMsg" style="display: none"></div>
-            <input class="ui submit button" type="submit" value="작성" name="" style="background-color:dodgerblue; color:white"/>
+            <input type="hidden" name="postId" value="<%= posts._doc._id%>" />      
+            <input class="ui submit button" type="submit" value="수정" name="" style="background-color:dodgerblue; color:white"/>
             <input class="ui button" type="button" value="취소" name="" onclick="javascript:window.history.back()" />
           </form>
         </div>
@@ -194,8 +195,8 @@
   <!-- Bootstrap core JavaScript -->
   <script src="/public/vendor/jquery/jquery.min.js"></script>
   <script src="/public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../public/summernote/summernote.js"></script>
-  <script src="../public/semantic/out/semantic.min.js"></script>
+  <script src="/public/summernote/summernote.js"></script>
+  <script src="/public/semantic/out/semantic.min.js"></script>
   <!-- Menu Toggle Script -->
   <script>
     $("#menu-toggle").click(function (e) {
@@ -251,7 +252,7 @@
         return false;
       }
 
-      if(confirm("글 작성을 완료하시겠습니까?"))
+      if(confirm("글 수정을 완료하시겠습니까?"))
         return true;
       else
         return false;

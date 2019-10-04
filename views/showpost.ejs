@@ -114,8 +114,7 @@
     <div id="page-content-wrapper">
 
       <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-        <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button>
-
+        <button class="btn btn-primary btn-lg" id="menu-toggle"><i class="bars icon"></i></button>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -178,9 +177,9 @@
         <% if(user && curWriteEmail === user.email) { %>
         <form id="deleteBtn" method="post" action="/process/deletepost", onsubmit="return confirmForm();" style="float: right">
           <input type="hidden" name="postId" value="<%= posts._doc._id %>" />
-          <input class="ui submit button" type="submit" value="삭제" , name="" style="background-color: lightcoral; color:white" />
-          <!-- <a href="#" class="ui button" onclick="document.getElementById('deleteBtn').submit();">삭제</a> -->
+          <input class="ui submit button" type="submit" value="삭제" , name="" style="background-color: hsl(14, 100%, 53%); color:white" />
         </form>
+        <a class="ui button" href="/process/updatepost/<%= posts._doc._id %>" style="background-color:dodgerblue; color:white; float: right">수정</a>        
         <% } %>
       </div>
     </div>
@@ -204,7 +203,6 @@
   </script>
   <script>
     const confirmForm = () => {
-      console.log("@@@@@@@@@@@@@@@@@@@");
       if (confirm("삭제 하시겠습니까?"))
         return true;
       else
