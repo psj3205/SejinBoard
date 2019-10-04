@@ -143,9 +143,16 @@
 
         <div class="ui blue fluid card">
           <div class="content">
-            <table class="ui striped table">
-              <tread>
-              </tread>
+            <table class="ui tablet stackable striped table">
+              <thead>
+                <tr>
+                  <th class="one wide"></th>
+                  <th class="ten wide"></th>
+                  <th class="two wide"></th>
+                  <th class="two wide"></th>
+                  <th class="one wide"></th>
+                </tr>
+              </thead>
               <tbody>
                 <% 
                               const noStart = (pageCount - page) * perPage; 
@@ -167,9 +174,9 @@
                       <h6><%= curTitle %></h6>
                     </a>
                   </td>
-                  <td class="right aligned collapsing"><%= curWriter%></td>
-                  <td class="right aligned collapsing"><%= createdTime %></td>
-                  <td class="left aligned collapsing"><i class="eye icon"></i><%= curviews %></td>
+                  <td class="right aligned"><%= curWriter%></td>
+                  <td class="right aligned"><%= createdTime %></td>
+                  <td class="left aligned"><i class="eye icon"></i><%= curviews %></td>
                 </tr>
                 <% } %>
               </tbody>
