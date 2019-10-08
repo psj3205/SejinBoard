@@ -8,7 +8,7 @@ Schema.createSchema = (mongoose) => {
         , contents: { type: String, trim: true, 'default': '' }
         , writer: { type: mongoose.Schema.ObjectId, ref: 'users6' }
         , tags: { type: [], 'default': '' }
-        , views: { type:Number, 'default': 0 }
+        , views: { type: Number, 'default': 0 }
         , created_at: { type: Date, index: { unique: false }, 'default': Date.now }
         , updated_at: { type: Date, index: { unique: false }, 'default': Date.now }
         , comments: [{
@@ -69,10 +69,10 @@ Schema.createSchema = (mongoose) => {
                 .skip(options.perPage * options.page)
                 .exec(callback);
         },
-        deletePost: function(id, callback) {
+        deletePost: function (id, callback) {
             this.remove({ _id: id }, callback);
         },
-        updatePost: function(id, update, callback) {
+        updatePost: function (id, update, callback) {
             this.findByIdAndUpdate({ _id: id }, update, callback);
         }
     };

@@ -181,8 +181,14 @@
             </div>
             <div class="alert alert-danger" id="alertMsg" style="display: none"></div>
             <input class="ui submit button" type="submit" value="작성" name="" style="background-color:dodgerblue; color:white"/>
-            <input class="ui button" type="button" value="취소" name="" onclick="javascript:window.history.back()" />
+            <!-- <input class="ui button" type="button" value="취소" name="" onclick="goBack()" /> -->
           </form>
+          <form id="boardbtn" method="post" action="/process/listpost">
+            <input type="hidden" name="page" value="0" />
+            <input type="hidden" name="perPage" value="5" />
+            <a href="#" class="list-group-item list-group-item-action bg-light" style="text-align: center;"
+              onclick="document.getElementById('boardbtn').submit();">취소</a>
+          </form>          
         </div>
       </div>
     </div>
@@ -256,6 +262,15 @@
       else
         return false;
     };
+  </script>
+  <!-- 새 글쓰기 취소 -->
+  <script>
+    const goBack = ()=> {
+      const condition = document.referrer.split('/').pop() === "login"
+      // 새 글쓰기 버튼으로 로그인하면 취소 버튼 눌렀을 때 두번 뒤로가기
+      // 이미 로그인 된 상태에서 새 글쓰기 진입 후 취소 버튼 누르면 한번 뒤로가기
+      condition ? window.history.go(-2) : window.history.go(-1)
+    }
   </script>
 </body>
 

@@ -25,6 +25,8 @@ exports.isLoggedin = function (req, res, next) {
   }
   else {
     req.flash("errors", { login: "Please login first" });
+    req.session.returnTo = req.path;
+    // console.log("********", req.session.returnTo);
     res.redirect("/login");
   }
 };
