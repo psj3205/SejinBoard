@@ -97,7 +97,7 @@
         <a href="/">Sejin Board </a>
       </div>
       <div class="list-group list-group-flush">
-        <form id="boardbtn" method="post" action="/process/listpost">
+        <form id="boardbtn" method="post" action="/board/listpost">
           <input type="hidden" name="page" value="0" />
           <input type="hidden" name="perPage" value="5" />
           <a href="#" class="list-group-item list-group-item-action bg-light"
@@ -173,13 +173,13 @@
           </div>
         </div>
         <br />
-        <a class="ui button" href="/process/listpost?page=0&perPage=5">글 목록</a>
+        <a class="ui button" href="/board/listpost?page=0&perPage=5">글 목록</a>
         <% if(user && curWriteEmail === user.email) { %>
-        <form id="deleteBtn" method="post" action="/process/deletepost", onsubmit="return confirmForm();" style="float: right">
+        <form id="deleteBtn" method="post" action="/board/deletepost", onsubmit="return confirmForm();" style="float: right">
           <input type="hidden" name="postId" value="<%= posts._doc._id %>" />
           <input class="ui submit button" type="submit" value="삭제" , name="" style="background-color: hsl(14, 100%, 53%); color:white" />
         </form>
-        <a class="ui button" href="/process/updatepost/<%= posts._doc._id %>" style="background-color:dodgerblue; color:white; float: right">수정</a>        
+        <a class="ui button" href="/board/updatepost/<%= posts._doc._id %>" style="background-color:dodgerblue; color:white; float: right">수정</a>        
         <% } %>
       </div>
     </div>

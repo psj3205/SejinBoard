@@ -66,7 +66,7 @@
   <script>
     function listpost(page, perPage) {
       document.location =
-        `/process/listpost?page=${page}&perPage=${perPage}`;
+        `/board/listpost?page=${page}&perPage=${perPage}`;
     }
   </script>
 
@@ -82,7 +82,7 @@
         <a href="/">Sejin Board </a>
       </div>
       <div class="list-group list-group-flush">
-        <form id="boardbtn" method="post" action="/process/listpost">
+        <form id="boardbtn" method="post" action="/board/listpost">
           <input type="hidden" name="page" value="0" />
           <input type="hidden" name="perPage" value="5" />
           <a href="#" class="list-group-item list-group-item-action bg-light"
@@ -168,7 +168,7 @@
                   </td>
                   <td>
                     <a class="ui left aligned header"
-                      onclick="javascript : window.location = '/process/showpost/<%= posts[i]._id%>'">
+                      onclick="javascript : window.location = '/board/showpost/<%= posts[i]._id%>'">
                       <h6><%= curTitle %></h6>
                     </a>
                   </td>
@@ -243,8 +243,8 @@
                       %>
             </div>
             <br /><br />
-            <a class="ui button" href="/process/listpost?page=<%= page %>&perPage=<%= perPage%>">새로고침</a>
-            <a class="ui button" href="/process/addpost" style="background-color:dodgerblue; color:white">새 글쓰기</a>
+            <a class="ui button" href="/board/listpost?page=<%= page %>&perPage=<%= perPage%>">새로고침</a>
+            <a class="ui button" href="/board/newpost" style="background-color:dodgerblue; color:white">새 글쓰기</a>
           </div>
         </div>
       </div>

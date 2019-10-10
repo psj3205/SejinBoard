@@ -103,7 +103,7 @@
         <a href="/">Sejin Board </a>
       </div>
       <div class="list-group list-group-flush">
-        <form id="boardbtn" method="post" action="/process/listpost">
+        <form id="boardbtn" method="post" action="/board/listpost">
           <input type="hidden" name="page" value="0" />
           <input type="hidden" name="perPage" value="5" />
           <a href="#" class="list-group-item list-group-item-action bg-light"
@@ -159,7 +159,7 @@
 
       <div class="container-fluid">
         <div id="cardbox" class="ui blue fluid card">
-          <form class="content ui form" method="post" action="/process/addpost" , onsubmit="return validateForm();">
+          <form class="content ui form" method="post" action="/board/newpost" , onsubmit="return validateForm();">
             <h4 class="ui dividing header">새 글쓰기</h4>
             <div class="two fields">
               <div class="field">
@@ -183,7 +183,7 @@
             <input class="ui submit button" type="submit" value="작성" name="" style="background-color:dodgerblue; color:white"/>
             <!-- <input class="ui button" type="button" value="취소" name="" onclick="goBack()" /> -->
           </form>
-          <form id="boardbtn" method="post" action="/process/listpost">
+          <form id="boardbtn" method="post" action="/board/listpost">
             <input type="hidden" name="page" value="0" />
             <input type="hidden" name="perPage" value="5" />
             <a href="#" class="list-group-item list-group-item-action bg-light" style="text-align: center;"
