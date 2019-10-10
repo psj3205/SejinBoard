@@ -24,9 +24,9 @@ app.use('/public', static(path.join(__dirname, 'public')));
 app.use('/uploads', static(path.join(__dirname, 'uploads')));
 app.use(cookieParser());
 app.use(expressSession({
-    secret: 'my key',
-    resave: true,
-    saveUninitialized: true
+  secret: 'my key',
+  resave: true,
+  saveUninitialized: true
 }));
 app.use(cors());
 app.use(passport.initialize());
@@ -43,14 +43,14 @@ const userPassport = require('./routes/user_passport');
 userPassport(app, passport);
 
 const errorHandler = expressErrorHandler({
-    static: {
-        '404': './public/404.html'
-    }
+  static: {
+    '404': './public/404.html'
+  }
 });
 
 app.use(expressErrorHandler.httpError(404));
 app.use(errorHandler);
 
 http.createServer(app).listen(app.get('port'), () => {
-    console.log('서버가 시작되었습니다. 포트: ' + app.get('port'));
+  console.log('서버가 시작되었습니다. 포트: ' + app.get('port'));
 });

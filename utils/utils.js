@@ -3,7 +3,7 @@ exports.indexOf = (arr, obj) => {
   const keys = Object.keys(obj);
 
   const result = arr.filter((doc, idx) => {
-    let = matched = 0;
+    let matched = 0;
 
     for (let i = keys.length - 1; i >= 0; i--) {
       if (doc[keys[i]] === obj[keys[i]]) {
