@@ -17,7 +17,7 @@
   <% const curTitle = posts._doc.title; 
   const curContents = posts._doc.contents; 
   const curWriter = posts._doc.writer.name;
-  const curWriteEmail = posts._doc.writer.email;
+  const curWriterEmail = posts._doc.writer.email;
   const createdTime = moment(posts._doc.created_at).tz("Asia/Seoul").format("LLL");
   const entities = new Entities(); 
   const decodedContents = entities.decode(curContents); %>
@@ -171,15 +171,52 @@
               <%= curWriter %>
             </div>
           </div>
+          <div class="extra content">
+            <div class="header">댓글: <%= posts._doc.comments.length %></div>
+            <% if(user) { %>
+            <form id="" method="post" action="/board/newcomment" , onsubmit="return commentConfirmForm();" style="padding-bottom: 50px;">
+              <input type="hidden" name="commentWriterObjId" value="<%= user._id%>" />
+              <input type="hidden" name="postObjId" value="<%= posts._doc._id%>" />
+              <textarea name="comment" class="form-control" style="min-width:100%" placeholder="댓글을 입력하세요."></textarea>
+              <br />
+              <input class="ui submit button" type="submit" value="작성" , name=""
+                style="background-color: dodgerblue; color:white; float: right;" />
+            </form>
+            <% } %>
+            <table class="ui tablet stackable striped table">
+              <thead>
+              </thead>
+              <tbody>
+                <% 
+                    for(let i = 0; i < posts._doc.comments.length; i++){ 
+                        const comment = posts._doc.comments[i].contents;
+                        const id = posts._doc.comments[i].writer.name;
+                        const createdTime = moment(posts._doc.comments[i].created_at).tz("Asia/Seoul").format("MMM Do");
+                    %>
+                <tr>
+                  <td class="ten wide left aligned">
+                    <%= comment %>
+                  </td>
+                  <td class="six wide right aligned">
+                    <%= id %> <%= createdTime %>
+                  </td>
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
         </div>
         <br />
         <a class="ui button" href="/board/listpost?page=0&perPage=5">글 목록</a>
-        <% if(user && curWriteEmail === user.email) { %>
-        <form id="deleteBtn" method="post" action="/board/deletepost", onsubmit="return confirmForm();" style="float: right">
+        <% if(user && (curWriterEmail === user.email)) { %>
+        <form id="deleteBtn" method="post" action="/board/deletepost" , onsubmit="return delConfirmForm();"
+          style="float: right">
           <input type="hidden" name="postId" value="<%= posts._doc._id %>" />
-          <input class="ui submit button" type="submit" value="삭제" , name="" style="background-color: hsl(14, 100%, 53%); color:white" />
+          <input class="ui submit button" type="submit" value="삭제" , name=""
+            style="background-color: hsl(14, 100%, 53%); color:white" />
         </form>
-        <a class="ui button" href="/board/updatepost/<%= posts._doc._id %>" style="background-color:dodgerblue; color:white; float: right">수정</a>        
+        <a class="ui button" href="/board/updatepost/<%= posts._doc._id %>"
+          style="background-color:dodgerblue; color:white; float: right">수정</a>
         <% } %>
       </div>
     </div>
@@ -202,8 +239,14 @@
     });
   </script>
   <script>
-    const confirmForm = () => {
+    const delConfirmForm = () => {
       if (confirm("삭제 하시겠습니까?"))
+        return true;
+      else
+        return false;
+    };
+    const commentConfirmForm = () => {
+      if (confirm("댓글을 작성 하시겠습니까?"))
         return true;
       else
         return false;

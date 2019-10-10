@@ -3,6 +3,7 @@ const deletePost = require('./methods/deletepost');
 const readPost = require('./methods/readpost');
 const updatePost = require('./methods/updatepost');
 const listPost = require('./methods/listpost');
+const createComment = require('./methods/comment/createcomment');
 
 module.exports.addNewPost = createPost.addNewPost;
 module.exports.openNewPost = createPost.openNewPost;
@@ -11,3 +12,4 @@ module.exports.showPost = readPost.showPost;
 module.exports.updatePost = updatePost.updatePost;
 module.exports.openUpdatePost = updatePost.openUpdatePost;
 module.exports.listPost = listPost.listPost;
+module.exports.addComment = createComment.addComment;

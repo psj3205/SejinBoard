@@ -32,9 +32,9 @@ Schema.createSchema = (mongoose) => {
     },
 
     addComment: function (user, comment, callback) {
-      this.comment.push({
-        contents: comment.contents,
-        writer: user._id
+      this.comments.push({
+        contents: comment,
+        writer: user
       });
       this.save(callback);
     },
@@ -56,7 +56,7 @@ Schema.createSchema = (mongoose) => {
     load: function (id, callback) {
       this.findOne({ _id: id })
         .populate('writer', 'name provider email')
-        .populate('comments.writer')
+        .populate('comments.writer', 'name provider email')
         .exec(callback);
     },
     list: function (options, callback) {

@@ -25,6 +25,7 @@ const showPost = (req, res) => {
       }
 
       if (results) {
+        console.dir("글 읽기 결과!!!");
         console.dir(results);
         res.writeHead('200', { 'Content-Type': 'text/html;charset=utf8' });
         results.views++;
