@@ -2,14 +2,12 @@
 <html lang="en">
 
 <head>
-
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
   <!-- Bootstrap core CSS -->
   <link href="/public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
   <!-- Custom styles for this template -->
   <!-- <link href="css/simple-sidebar.css" rel="stylesheet"> -->
   <link href="/public/css/simple-sidebar.css" rel="stylesheet">
@@ -72,25 +70,10 @@
       color: teal;
     }
   </style>
-
-  <script src="/public/jquery-3.1.1.min.js"></script>
-  <script src="/public/semantic/out/semantic.min.js"></script>
-  <script src="/public/cleditor/jquery.cleditor.min.js"></script>
-
-  <script>
-    $(document).ready(function () {
-      var output = $("#contentsOutput").text();
-      console.log("output : " + output);
-
-      $("#contentsOutput").html(output);
-    });
-  </script>
 </head>
 
 <body>
-
   <div class="d-flex" id="wrapper">
-
     <!-- Sidebar -->
     <div class="bg-light border-right" id="sidebar-wrapper">
       <div class="sidebar-heading">
@@ -112,7 +95,6 @@
 
     <!-- Page Content -->
     <div id="page-content-wrapper">
-
       <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
         <button class="btn btn-primary btn-lg" id="menu-toggle"><i class="bars icon"></i></button>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -223,14 +205,21 @@
   </div>
   </div>
   <!-- /#page-content-wrapper -->
-
   </div>
   <!-- /#wrapper -->
 
   <!-- Bootstrap core JavaScript -->
   <script src="/public/vendor/jquery/jquery.min.js"></script>
   <script src="/public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
+  <script src="/public/jquery-3.1.1.min.js"></script>
+  <script src="/public/semantic/out/semantic.min.js"></script>
+  <script src="/public/cleditor/jquery.cleditor.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      var output = $("#contentsOutput").text();
+      $("#contentsOutput").html(output);
+    });
+  </script>
   <!-- Menu Toggle Script -->
   <script>
     $("#menu-toggle").click(function (e) {
@@ -253,5 +242,4 @@
     };
   </script>
 </body>
-
 </html>
