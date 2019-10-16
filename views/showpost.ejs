@@ -172,7 +172,9 @@
                 <% 
                     for(let i = 0; i < posts._doc.comments.length; i++){ 
                         const comment = posts._doc.comments[i].contents;
-                        const id = posts._doc.comments[i].writer.name;
+                        const commentWriterName = posts._doc.comments[i].writer.name;
+                        const commentWriterEmail = posts._doc.comments[i].writer.email;
+                        const commentObjId = posts._doc.comments[i]._id;
                         const createdTime = moment(posts._doc.comments[i].created_at).tz("Asia/Seoul").format("MMM Do");
                     %>
                 <tr>
@@ -180,7 +182,16 @@
                     <%= comment %>
                   </td>
                   <td class="six wide right aligned">
-                    <%= id %> <%= createdTime %>
+                    <%= commentWriterName %> <%= createdTime %>
+                    <% if(user && (commentWriterEmail === user.email)) { %>
+                      <form id="" method="post" action="/board/deletecomment" , onsubmit="return delConfirmForm();"
+                        style="float: right">
+                        <input type="hidden" name="postId" value="<%= posts._doc._id %>" />
+                        <input type="hidden" name="commentObjId" value="<%= commentObjId %>" />
+                        <input class="btn btn-default btn-sm" type="submit" value="삭제" , name="" style="background-color:gray; color:white" />
+                      </form>
+                      <a class="btn btn-default btn-sm" href="/board/updatecomment/<%= posts._doc._id %>" style="background-color:gray; color:white; float: right">수정</a>
+                      <% } %>                    
                   </td>
                 </tr>
                 <% } %>

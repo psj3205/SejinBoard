@@ -40,9 +40,9 @@ Schema.createSchema = (mongoose) => {
     },
 
     removeComment: function (id, callback) {
-      const index = utils.indexOf(this.comments, { id: id });
-
-      if (~index) {
+      const index = utils.indexOf(this.comments, { _id: id });
+      console.log(index);
+      if (index > -1) {
         this.comments.splice(index, 1);
       }
       else {

@@ -3,7 +3,7 @@ moment.locale('ko');
 
 // 게시판 목록 보여주기 post 메소드 or get 메소드로도 호출 가능 쿼리이용해서
 const listPost = (req, res) => {
-  console.log('post 모듈 안에 있는 listpost 호출됨.');
+  console.log('listPost 메소드 호출됨.');
 
   const paramPage = req.body.page || req.query.page;
   const paramPerPage = req.body.perPage || req.query.perPage;

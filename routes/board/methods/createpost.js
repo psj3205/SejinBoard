@@ -1,5 +1,6 @@
 // 새글 작성 get 메소드
 const openNewPost = (req, res) => {
+  console.log('openNewPost 메소드 호출됨.');
   const context = {
     user: req.user // 로그인 정보 전달
   };
@@ -13,7 +14,7 @@ const openNewPost = (req, res) => {
 
 // 새글 작성 post 메소드
 const addNewPost = (req, res) => {
-  console.log('post 모듈 안에 있는 addpost 호출됨.');
+  console.log('addNewPost 메소드 호출됨.');
 
   const paramTitle = req.body.title || req.query.title;
   const paramContents = req.body.contents || req.query.contents;

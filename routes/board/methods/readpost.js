@@ -4,7 +4,7 @@ moment.locale('ko');
 
 // 선택한 글 보여주기
 const showPost = (req, res) => {
-  console.log('post 모듈 안에 있는 showpost 호출됨.');
+  console.log('showPost 메소드 호출됨.');
 
   const paramId = req.body.id || req.query.id || req.params.id;
 

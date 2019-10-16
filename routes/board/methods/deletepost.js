@@ -1,6 +1,6 @@
 // 글 삭제 post 메소드
 const deletePost = (req, res) =>{
-  console.log('post 모듈 안에 있는 deletepost 호출됨.');
+  console.log('deletePost 메소드 호출됨.');
 
   const paramId = req.body.postId || req.query.postId || req.params.postId;
 

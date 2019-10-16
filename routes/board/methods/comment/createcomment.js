@@ -1,14 +1,14 @@
 const addComment = (req, res) =>{
-  console.log('addComment 호출됨');
+  console.log('addComment 메소드 호출됨');
 
   const paramComment =req.body.comment;
   const paramCommentWriterObjId =req.body.commentWriterObjId;
-  const parampostObjId =req.body.postObjId;
-  console.log(`요청 파라미터 : ${paramComment}, ${paramCommentWriterObjId}, ${parampostObjId}`);
+  const paramPostObjId =req.body.postObjId;
+  console.log(`요청 파라미터 : ${paramComment}, ${paramCommentWriterObjId}, ${paramPostObjId}`);
   const database = req.app.get('database');
 
   if(database.db){
-    database.PostModel.load(parampostObjId, (err, results) => {
+    database.PostModel.load(paramPostObjId, (err, results) => {
       if (err) {
         console.log(`댓글 추가 중 오류 발생 : ${err.stack}`);
 
@@ -20,7 +20,7 @@ const addComment = (req, res) =>{
       }
       if (results == undefined || results.length < 1) {
         res.writeHead('200', { 'Content-Type': 'text/html;charset=utf8' });
-        res.write(`<h2> [${parampostObjId}]를 찾을 수 없습니다.</h2>`);
+        res.write(`<h2> [${paramPostObjId}]를 찾을 수 없습니다.</h2>`);
         res.end();
         return;
       }

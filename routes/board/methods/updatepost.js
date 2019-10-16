@@ -3,7 +3,7 @@ const moment = require('moment-timezone');
 moment.locale('ko');
 
 const updatePost = (req, res) =>{
-  console.log('post 모듈 안에 있는 updatepost 호출됨.');
+  console.log('updatePost 메소드 호출됨.');
   const paramId = req.body.postId || req.query.postId || req.params.postId;
   const updatedtitle = req.body.title || req.query.title || req.params.title;
   const updatedContents = req.body.contents || req.query.contents || req.params.contents;
