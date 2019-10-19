@@ -156,7 +156,8 @@
           <div class="extra content">
             <div class="header">댓글: <%= posts._doc.comments.length %></div>
             <% if(user) { %>
-            <form id="" method="post" action="/board/newcomment" , onsubmit="return commentConfirmForm();" style="padding-bottom: 50px;">
+            <form id="" method="post" action="/board/newcomment" , onsubmit="return commentConfirmForm();"
+              style="padding-bottom: 50px;">
               <input type="hidden" name="commentWriterObjId" value="<%= user._id%>" />
               <input type="hidden" name="postObjId" value="<%= posts._doc._id%>" />
               <textarea name="comment" class="form-control" style="min-width:100%" placeholder="댓글을 입력하세요."></textarea>
@@ -177,21 +178,25 @@
                         const commentObjId = posts._doc.comments[i]._id;
                         const createdTime = moment(posts._doc.comments[i].created_at).tz("Asia/Seoul").format("MMM Do");
                     %>
-                <tr>
+                <!-- 댓글의 인댁스를 tr태그의 id에 붙여주어서 댓글 수정 시에 해당 tr을 찾을 수 있게 한다 -->
+                <tr id="commentTr_<%= i%>">
                   <td class="ten wide left aligned">
                     <%= comment %>
                   </td>
                   <td class="six wide right aligned">
                     <%= commentWriterName %> <%= createdTime %>
                     <% if(user && (commentWriterEmail === user.email)) { %>
-                      <form id="" method="post" action="/board/deletecomment" , onsubmit="return delConfirmForm();"
-                        style="float: right">
-                        <input type="hidden" name="postId" value="<%= posts._doc._id %>" />
-                        <input type="hidden" name="commentObjId" value="<%= commentObjId %>" />
-                        <input class="btn btn-default btn-sm" type="submit" value="삭제" , name="" style="background-color:gray; color:white" />
-                      </form>
-                      <a class="btn btn-default btn-sm" href="/board/updatecomment/<%= posts._doc._id %>" style="background-color:gray; color:white; float: right">수정</a>
-                      <% } %>                    
+                    <form id="" method="post" action="/board/deletecomment" , onsubmit="return delConfirmForm();"
+                      style="float: right">
+                      <input type="hidden" name="postId" value="<%= posts._doc._id %>" />
+                      <input type="hidden" name="commentObjId" value="<%= commentObjId %>" />
+                      <input class="btn btn-default btn-sm" type="submit" value="삭제" , name=""
+                        style="background-color:gray; color:white" />
+                    </form>
+                    <!-- <a class="btn btn-default btn-sm" href="/board/updatecomment/<%= posts._doc._id %>" style="background-color:gray; color:white; float: right">수정</a> -->
+                    <a class="btn btn-default btn-sm" style="background-color:gray; color:white; float: right"
+                      onclick="createUpdateCommentBox('<%= i%>', '<%= comment%>', '<%= commentWriterName%>', '<%= createdTime%>', '<%= posts._doc._id %>', '<%= commentObjId%>');">수정</a>
+                    <% } %>
                   </td>
                 </tr>
                 <% } %>
@@ -251,6 +256,35 @@
       else
         return false;
     };
+    const cancelUpdateCommentBox = (commentIdx, comment, commentWriterName, createdTime, postObjId, commentObjId) => {
+      console.log(commentIdx, comment, commentWriterName, createdTime, postObjId, commentObjId);
+      document.getElementById(`commentTr_${commentIdx}`).innerHTML = `
+      <td class="ten wide left aligned">
+        ${comment}
+      </td>
+      <td class="six wide right aligned">
+        ${commentWriterName} ${createdTime}
+        <form id="" method="post" action="/board/deletecomment" , onsubmit="return delConfirmForm();"
+          style="float: right">
+          <input type="hidden" name="postId" value="${postObjId}" />
+          <input type="hidden" name="commentObjId" value="${commentObjId}" />
+          <input class="btn btn-default btn-sm" type="submit" value="삭제" , name="" style="background-color:gray; color:white" />
+        </form>        
+        <a class="btn btn-default btn-sm" style="background-color:gray; color:white; float: right" onclick="createUpdateCommentBox('${commentIdx}', '${comment}', '${commentWriterName}', '${createdTime}', '${postObjId}', '${commentObjId}');">수정</a>
+      </td>`
+    };
+    const createUpdateCommentBox = (commentIdx, comment, commentWriterName, createdTime, postObjId, commentObjId) => {
+      console.log(commentIdx, comment, commentWriterName, createdTime, postObjId, commentObjId);
+      document.getElementById(`commentTr_${commentIdx}`).innerHTML = `
+      <td class='ten wide left aligned'>
+        <textarea name='commentUpdate' class='form-control' >${comment}</textarea>
+      </td>
+      <td class='six wide right aligned'>
+        <a class="btn btn-default btn-sm" style="background-color:gray; color:white; float: right">확인</a>
+        <a class="btn btn-default btn-sm" style="background-color:gray; color:white; float: right" onclick="cancelUpdateCommentBox('${commentIdx}', '${comment}', '${commentWriterName}', '${createdTime}', '${postObjId}', '${commentObjId}');">취소</a>
+      </td>`
+    };
   </script>
 </body>
+
 </html>
