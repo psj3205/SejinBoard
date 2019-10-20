@@ -49,6 +49,16 @@ Schema.createSchema = (mongoose) => {
         return callback(`ID [${id}]를 가진 댓글 객체를 찾을 수 없습니다.`);
       }
       this.save(callback);
+    }, 
+    updateComment: function(id, updatedComment, callback){
+      const index = utils.indexOf(this.comments, { _id: id });
+      if(index > -1){
+        this.comments[index].contents = updatedComment;
+      }
+      else {
+        return callback(`ID [${id}]를 가진 댓글 객체를 찾을 수 없습니다.`);
+      }
+      this.save(callback);
     }
   };
 

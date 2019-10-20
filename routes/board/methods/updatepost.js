@@ -10,7 +10,7 @@ const updatePost = (req, res) =>{
   const update = {
     title: updatedtitle,
     contents : updatedContents,
-  }
+  };
   console.log(`요청 파라미터 : ${paramId}`);
 
   const database = req.app.get('database');
