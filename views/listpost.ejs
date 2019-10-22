@@ -156,7 +156,8 @@
                               const noStart = (pageCount - page) * perPage; 
                               for(let i = 0; i < posts.length; i++){ 
                                   const curTitle = posts[i]._doc.title; 
-                                  const curContents = posts[i]._doc.contents; 
+                                  const curContents = posts[i]._doc.contents;
+                                  const curCommentsNum = posts[i]._doc.comments.length;
                                   const curWriter = posts[i]._doc.writer.name; 
                                   const curNo = noStart - i; 
                                   const curviews = posts[i]._doc.views;
@@ -169,7 +170,11 @@
                   <td>
                     <a class="ui left aligned header"
                       onclick="javascript : window.location = '/board/showpost/<%= posts[i]._id%>'">
-                      <h6><%= curTitle %></h6>
+                      <h6><%= curTitle %>
+                        <% if(curCommentsNum > 0) {%>
+                        <b style="color:dodgerblue"> (<%= curCommentsNum %>)</b>
+                        <% } %>
+                      </h6>
                     </a>
                   </td>
                   <td class="right aligned"><%= curWriter%></td>
